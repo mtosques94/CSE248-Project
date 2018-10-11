@@ -24,9 +24,9 @@ public class ChessMove implements Serializable {
     /**
      * ConsolePlayer input constructor
      * @param fromCol source column as character
-     * @param fromRow source row as character
+     * @param fromRow source row as integer
      * @param toRow destination row as integer
-     * @param toCol destination column as integer
+     * @param toCol destination column as character
      */
     public ChessMove(char fromCol, int fromRow, char toCol, int toRow) {
         for (int x = 0; x < COLUMNS.length; x++) {
