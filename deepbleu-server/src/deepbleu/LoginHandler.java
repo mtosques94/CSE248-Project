@@ -1,52 +1,50 @@
 package deepbleu;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.sql.*; //to do...
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import java.sql.*;
 
 public class LoginHandler {
-
-	static final int portNumber = 1994;
-
+	
 	public static void main(String[] args) {
 		
+		//Load SQLite driver
 		try {
-			/*
-			ServerSocket ss = new ServerSocket(portNumber);
-			ss.setSoTimeout(0); // Socket never closes
-			System.out.println("listening...");
-			Socket temp = ss.accept(); // Listen for incoming connection
-			temp.setSoTimeout(120000); // Timeout 2 minutes (set to what you want)
-			BufferedReader br = new BufferedReader(new InputStreamReader(temp.getInputStream()));
-			String content = br.readLine();
-			System.out.println(content);
-			ss.close();
-			*/
-			JsonObject json = new JsonObject();
-			json.addProperty("username","john");
-			json.addProperty("password", "doe");
-			String content = json.toString();
-			
-			AuthPair ap = new Gson().fromJson(content, AuthPair.class);
-			System.out.println(ap);
-			
-		} catch (Exception e) {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		/*
-		Player playerOne = new ConsolePlayer("You", true);
-		Player playerTwo = new ComputerPlayer("deepbleu", false);
+		//Connect to the database
+		Connection c = null;
+		try {
+			c = DriverManager.getConnection("jdbc:sqlite:PlayerDB.sqlite3");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		//Print all Players
+		String sql = "SELECT * from Players";
+		PreparedStatement p = null;
+		ResultSet r = null;
+		
+		try {
+			p = c.prepareStatement(sql);
+			p.clearParameters();
+			r = p.executeQuery();
+			
+			while(r.next()) {
+				System.out.print(r.getString("name") + " ");
+				System.out.println(r.getString("password"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//this will need to be in a new thread
+	private static void startGame(Player playerOne, Player playerTwo) {
 		GameOfChess game = new GameOfChess(playerOne, playerTwo);
 		game.GAME_LOOP();
-		*/
-		
 	}
 
 }
