@@ -5,15 +5,14 @@ import deepbleu.Piece;
 import deepbleu.Player;
 import java.util.ArrayList;
 import java.util.HashSet;
-import javafx.scene.image.Image;
 
 /**
  * @author Matthew Tosques
  */
 public class Pawn extends Piece {
     
-    static final Image DEFAULT_WHITE = new Image("/img/small/WhitePawn.png");
-    static final Image DEFAULT_BLACK = new Image("/img/small/BlackPawn.png");
+    //static final Image DEFAULT_WHITE = new Image("/img/small/WhitePawn.png");
+    //static final Image DEFAULT_BLACK = new Image("/img/small/BlackPawn.png");
 
     public Pawn(int x, int y, Player p) {
         super(x, y, p);
@@ -31,12 +30,14 @@ public class Pawn extends Piece {
         return 'p';
     }
     
+    /*
     @Override
         public Image getDefaultImage() {
         if(this.player.isWhite)
             return DEFAULT_WHITE;
         return DEFAULT_BLACK;
     }
+    */
         
     @Override
     public boolean canMoveToLocation(int x, int y, Board b, boolean ignoreTurns) {

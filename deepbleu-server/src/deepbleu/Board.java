@@ -4,13 +4,6 @@ import deepbleu.pieces.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import javafx.scene.Node;
-import javafx.scene.effect.Light;
-import javafx.scene.effect.Lighting;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 
 /**       
  * Represents a chess board with two players.
@@ -18,7 +11,7 @@ import javafx.scene.paint.Color;
  *
  * @author Matthew Tosques
  */
-public class Board extends GridPane {
+public class Board {
     
     //Toggle GUI response
     private boolean enabled = true;
@@ -29,6 +22,7 @@ public class Board extends GridPane {
                                                   //AI doesn't need to be forced out anyway.
     private static boolean GUI_EXIT_CHECK = true; //Restricting GUI moves works fine.
     
+    /*
     //Background tile images
     private static final Image TILE_LIGHT = new Image("/img/small/PureWhite.png"); //Image for light tile
     private static final Image TILE_DARK = new Image("/img/small/PureGrey.png"); //Image for dark tile
@@ -42,6 +36,7 @@ public class Board extends GridPane {
     private static final Color PICKUP_COLOR = Color.CYAN;
     private static final Color LEGALMOVE_COLOR = Color.GREEN;
     private static final Color CHECK_COLOR = Color.RED;
+    */
     
     Piece[][] tiles = new Piece[8][8]; //A 2D array will provide modestly efficient lookup.
     ArrayList<ChessMove> moveHistory = new ArrayList(); //Every canon move since the game began.
@@ -53,6 +48,7 @@ public class Board extends GridPane {
     /**
      * Apply lighting effects.
      */
+    /*
     private static void initLighting() {
         PICKUP_LIGHTING.setLight(new Light.Distant(45, 45, PICKUP_COLOR));
         PICKUP_LIGHTING.setSurfaceScale(2);
@@ -64,6 +60,7 @@ public class Board extends GridPane {
         CHECK_LIGHTING.setSurfaceScale(2);
         CHECK_LIGHTING.setDiffuseConstant(1);
     }
+    */
 
     /**
      * Board constructor.  Takes two players.
@@ -73,7 +70,7 @@ public class Board extends GridPane {
      * @param p2 Player two.
      */
     public Board(Player p1, Player p2) {
-        initLighting();
+        //initLighting();
         this.player1 = p1;
         this.player2 = p2;
         //White goes first.
@@ -107,6 +104,7 @@ public class Board extends GridPane {
         //Convert ArrayList to 2d array of pieces.
         inPlay.forEach((p) -> {tiles[p.x][p.y] = p;});
         //Add background tiles
+        /*
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (i % 2 == 0) { //even rows start with dark tile
@@ -124,6 +122,7 @@ public class Board extends GridPane {
                 }
             }
         }
+        
         //Create and add ImageViews to this board since it's a GridPane.
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
@@ -164,7 +163,8 @@ public class Board extends GridPane {
             }
         }
         this.setGridLinesVisible(true); //works for now
-        this.updateGraphics(); //apply lighting 
+        this.updateGraphics(); //apply lighting
+        */ 
     }
 
     /**
@@ -456,6 +456,7 @@ public class Board extends GridPane {
      * Updates the GUI.
      * Call this any time the selected piece changes, and between each move.
      */
+    /*
     public final void updateGraphics() {
         boolean inCheck = this.hasCheck();
         for (Node node : this.getChildren()) {
@@ -506,6 +507,7 @@ public class Board extends GridPane {
             }
         }
     }
+    */
 
     /**
      * Updates the character-based representation of the board in memory.

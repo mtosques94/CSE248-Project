@@ -11,29 +11,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
 /** ___ _____   @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@   @@@@@@@   @@@       @@@@@@@@  @@@  @@@
@@ -57,37 +34,27 @@ import javax.swing.JOptionPane;
  *          * Make window size adjustable.
  */
 
-public class GameOfChess extends Application {
+public class GameOfChess {
 
     //The GUI works as a live view of the game for any combination of player types.
-    static Player playerOne = new GUIPlayer("You", true);
+    static Player playerOne = new ConsolePlayer("You", true);
     static Player playerTwo = new ComputerPlayer("deepbleu", false);
     static final Board BOARD = new Board(playerOne, playerTwo);
-    static final ImageView CHECK_ICON = new ImageView(new Image("img/checkText.png"));
-    static final TextArea MOVE_HISTORY = new TextArea(playerOne + " vs " + playerTwo + "\n"
-            + new Date().toString() + "\n");
+    /*
+    //static final ImageView CHECK_ICON = new ImageView(new Image("img/checkText.png"));
+    //static final TextArea MOVE_HISTORY = new TextArea(playerOne + " vs " + playerTwo + "\n"
+    //        + new Date().toString() + "\n");
+     * 
+     */
+    
     //There should be no heavy computation in the JavaFX thread.
-    static final Service<Void> GAME_LOOP = new Service<Void>() {
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    //bind this service's progress property to that of ComputerPlayer
-                    ComputerPlayer.progressProperty().addListener(
-                            (obs, oldProgress, newProgress)
-                            -> updateProgress(newProgress.doubleValue(), 1));
-                    JOptionPane.showMessageDialog(null, "CHECKMATE!  The winner is: "
-                            + GameOfChess.getWinner());
-                    return null;
-                }
-            };
-        }
+    static final Player GAME_LOOP() {
+        return GameOfChess.getWinner();
     };
 
     //GUI!
     public static void main(String[] args) {
-        launch(args);
+    	System.out.println("The winner is: " + GameOfChess.getWinner());
     }
 
     /**
@@ -100,7 +67,7 @@ public class GameOfChess extends Application {
                 return BOARD.getWinner();
             }
             if (BOARD.hasCheck()) { //if current player is in check
-                CHECK_ICON.setOpacity(100); //display check icon in the toolbar
+                //CHECK_ICON.setOpacity(100); //display check icon in the toolbar
                 boolean canExitCheck = false;
                 for (ChessMove legalMove : allLegalMoves) { //see if any move gets current player to safety
                     BOARD.move(legalMove); //simulate move
@@ -115,10 +82,10 @@ public class GameOfChess extends Application {
                     return BOARD.getWinner();
                 }
             } else {
-                CHECK_ICON.setOpacity(0);
+                //CHECK_ICON.setOpacity(0);
             }
             playValidMove();
-            BOARD.updateGraphics();
+            //BOARD.updateGraphics();
         }
         return BOARD.getWinner();
     }
@@ -144,7 +111,7 @@ public class GameOfChess extends Application {
                     }
                 }
                 System.out.println("\n");
-                MOVE_HISTORY.appendText(BOARD.currentPlayer + " moved " + potentialMove + "\n");
+                //MOVE_HISTORY.appendText(BOARD.currentPlayer + " moved " + potentialMove + "\n");
                 BOARD.move(potentialMove);
                 valid = true;
             } else {
@@ -154,11 +121,13 @@ public class GameOfChess extends Application {
         }
     }
 
+    
     /**
      * configure UI -> display board -> start game -> declare winner
      *
      * @throws java.lang.Exception
      */
+    /*
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -568,4 +537,5 @@ public class GameOfChess extends Application {
         primaryStage.show();
         GAME_LOOP.start();
     }
+    */
 }

@@ -2,7 +2,6 @@ package deepbleu;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import javafx.scene.image.Image;
 
 /**
  * Abstract representation of a chess piece. 
@@ -87,7 +86,7 @@ public abstract class Piece implements Serializable {
      * Return an image of this piece.
      * @return a JavaFX Image object representing this piece
      */
-    public abstract Image getDefaultImage();
+    //public abstract Image getDefaultImage();
     
     /**
      * A single character representing this piece.
