@@ -35,11 +35,13 @@ import javax.swing.JOptionPane;
  */
 
 public class GameOfChess {
+	
+	Board BOARD;
+	
+	public GameOfChess(Player playerOne, Player playerTwo) {
+		BOARD = new Board(playerOne, playerTwo);
+	}
 
-    //The GUI works as a live view of the game for any combination of player types.
-    static Player playerOne = new ConsolePlayer("You", true);
-    static Player playerTwo = new ComputerPlayer("deepbleu", false);
-    static final Board BOARD = new Board(playerOne, playerTwo);
     /*
     //static final ImageView CHECK_ICON = new ImageView(new Image("img/checkText.png"));
     //static final TextArea MOVE_HISTORY = new TextArea(playerOne + " vs " + playerTwo + "\n"
@@ -48,23 +50,24 @@ public class GameOfChess {
      */
     
     //There should be no heavy computation in the JavaFX thread.
-    static final Player GAME_LOOP() {
-        return GameOfChess.getWinner();
+    Player GAME_LOOP() {
+        return this.getWinner();
     };
 
-    //GUI!
+    /*
     public static void main(String[] args) {
     	System.out.println("The winner is: " + GameOfChess.getWinner());
     }
+    /*
 
     /**
      * Allows legal moves until checkmate or draw. Returns the winning player.
      */
-    static Player getWinner() {
+    Player getWinner() {
         while (!(BOARD.hasDraw() || BOARD.kingCaptured())) {
             HashSet<ChessMove> allLegalMoves = BOARD.getAllLegalMoves();
             if (allLegalMoves.isEmpty()) {
-                return BOARD.getWinner();
+                return this.BOARD.getWinner();
             }
             if (BOARD.hasCheck()) { //if current player is in check
                 //CHECK_ICON.setOpacity(100); //display check icon in the toolbar
@@ -93,11 +96,11 @@ public class GameOfChess {
     /**
      * Makes sure moves make sense before we send them to the board.
      */
-    static void playValidMove() {
+    void playValidMove() {
         boolean valid = false;
         while (!valid) {
             System.out.println(BOARD);
-            System.out.println(BOARD.currentPlayer + "'s turn.  Total number of legal moves: "
+            System.out.println(this.BOARD.currentPlayer + "'s turn.  Total number of legal moves: "
                     + BOARD.getAllLegalMoves().size());
             ChessMove potentialMove = BOARD.currentPlayer.getMove(BOARD);
             if (BOARD.currentPlayer instanceof ComputerPlayer || BOARD.currentPlayer instanceof GUIPlayer
