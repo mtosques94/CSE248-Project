@@ -19,8 +19,7 @@ public class LoginListener {
 		handler.start();
 		listenUp();
 	}
-
-	@SuppressWarnings("resource")
+	
 	private static void listenUp() {
 		try {
 			listener = new ServerSocket(portNumber);
@@ -31,11 +30,9 @@ public class LoginListener {
 				InputStreamReader isr = new InputStreamReader(clientSocket.getInputStream());
 				BufferedReader reader = new BufferedReader(isr);
 				String line = reader.readLine();
-				while (!line.isEmpty()) {
-					System.out.println(line);
-					AuthPair loginAttempt = gson.fromJson(line, AuthPair.class);
-					lh.pendingLogins.add(loginAttempt);
-				}
+				System.out.println(line);
+				AuthPair loginAttempt = gson.fromJson(line, AuthPair.class);
+				lh.pendingLogins.add(loginAttempt);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
