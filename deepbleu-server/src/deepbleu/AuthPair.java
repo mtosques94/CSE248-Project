@@ -1,10 +1,15 @@
 package deepbleu;
 
 public class AuthPair {
-	
+
 	private String username;
 	private String password;
-	
+
+	public AuthPair(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -17,5 +22,5 @@ public class AuthPair {
 	public String toString() {
 		return "AuthPair [username=" + username + ", password=" + password + "]";
 	}
-	
+
 }
