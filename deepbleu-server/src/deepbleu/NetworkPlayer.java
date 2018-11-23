@@ -1,21 +1,32 @@
 package deepbleu;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+import com.google.gson.Gson;
 
 public class NetworkPlayer extends Player {
-	
-	final LinkedBlockingQueue<ChessMove> PUT_MOVE_HERE = new LinkedBlockingQueue(1);
-	//plus some network stuff
 
-	public NetworkPlayer(String name, boolean isWhite) {
+	Socket clientConnection;
+	Gson gson = new Gson();
+
+	public NetworkPlayer(String name, boolean isWhite, Socket clientConnection) {
 		super(name, isWhite);
+		this.clientConnection = clientConnection;
 	}
 
 	@Override
 	public ChessMove getMove(Board b) {
 		try {
-			return PUT_MOVE_HERE.take();
-		} catch (InterruptedException e) {
+			InputStreamReader isr = new InputStreamReader(clientConnection.getInputStream());
+			BufferedReader reader = new BufferedReader(isr);
+			String line = reader.readLine();
+			System.out.println(line);
+			ChessMove networkMove = gson.fromJson(line, ChessMove.class);
+			return networkMove;
+		} catch (IOException e) {
 			return null;
 		}
 	}
