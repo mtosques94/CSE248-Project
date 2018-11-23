@@ -1,8 +1,6 @@
 package deepbleu;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,7 +17,7 @@ public class LoginListener {
 		handler.start();
 		listenUp();
 	}
-	
+
 	private static void listenUp() {
 		try {
 			listener = new ServerSocket(portNumber);
@@ -27,12 +25,7 @@ public class LoginListener {
 			while (true) {
 				System.out.println("LoginListener listening on port " + portNumber + "...");
 				Socket clientSocket = listener.accept();
-				InputStreamReader isr = new InputStreamReader(clientSocket.getInputStream());
-				BufferedReader reader = new BufferedReader(isr);
-				String line = reader.readLine();
-				System.out.println(line);
-				AuthPair loginAttempt = gson.fromJson(line, AuthPair.class);
-				lh.pendingLogins.add(loginAttempt);
+				lh.pendingLogins.add(clientSocket);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

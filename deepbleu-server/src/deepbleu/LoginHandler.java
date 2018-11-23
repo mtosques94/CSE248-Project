@@ -1,12 +1,19 @@
 package deepbleu;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
 import java.sql.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.google.gson.Gson;
+
 public class LoginHandler implements Runnable {
 
-	LinkedBlockingQueue<AuthPair> pendingLogins = new LinkedBlockingQueue<AuthPair>();
+	LinkedBlockingQueue<Socket> pendingLogins = new LinkedBlockingQueue<Socket>();
 	private Connection DB;
+	Gson gson = new Gson();
 
 	public LoginHandler() {
 		// Load SQLite driver
@@ -49,9 +56,15 @@ public class LoginHandler implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				System.out.println("LoginHandler ready for AuthPairs...");
-				System.out.println(pendingLogins.take());
-			} catch (InterruptedException e) {
+				System.out.println("LoginHandler ready for client connections...");
+				Socket potentialLogin = pendingLogins.take();
+				InputStreamReader isr = new InputStreamReader(potentialLogin.getInputStream());
+				BufferedReader reader = new BufferedReader(isr);
+				String line = reader.readLine();
+				System.out.println(line);
+				AuthPair loginAttempt = gson.fromJson(line, AuthPair.class);
+				System.out.println("LoginHandler parsed AuthPair: " + loginAttempt);
+			} catch (InterruptedException | IOException e) {
 				e.printStackTrace();
 			}
 		}
