@@ -55,6 +55,10 @@ public class LoginHandler implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
+			
+			NetworkPlayer newGuy = null;
+			GameOfChess newGame = null;
+			
 			try {
 				System.out.println("LoginHandler ready for client connections...");
 				Socket clientConnection = pendingConnections.take();
@@ -64,11 +68,19 @@ public class LoginHandler implements Runnable {
 				System.out.println(line);
 				AuthPair latestAuth = gson.fromJson(line, AuthPair.class);
 				System.out.println("LoginHandler parsed AuthPair: " + latestAuth);
-				
-				NetworkPlayer newGuy = new NetworkPlayer(latestAuth.getUsername(), true, clientConnection);
-				GameOfChess newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", false));
-				
+
+				newGuy = new NetworkPlayer(latestAuth.getUsername(), true, clientConnection);
+				newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", false));
+
 			} catch (InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				System.out.println("Network game created!  Starting now...");
+				System.out.println("The winner is: " + newGame.call());
+			}
+			catch (Exception e ) {
 				e.printStackTrace();
 			}
 		}
