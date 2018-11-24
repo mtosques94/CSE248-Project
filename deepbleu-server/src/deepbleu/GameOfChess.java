@@ -1,17 +1,7 @@
 package deepbleu;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import java.util.concurrent.Callable;
 
 /** ___ _____   @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@   @@@@@@@   @@@       @@@@@@@@  @@@  @@@
  * /\ (_)    \  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@       @@@@@@@@  @@@  @@@
@@ -30,11 +20,10 @@ import javax.swing.JOptionPane;
  *          * En Passant, Castling, Pawn Promotion, 50 Move Rule, Threefold Repetition.
  *      - Regarding Back-end: 
  *          * Find bugs.
- *      - Regarding Front-end: 
- *          * Make window size adjustable.
+ *          
  */
 
-public class GameOfChess {
+public class GameOfChess implements Callable<Player> {
 	
 	Board BOARD;
 	
@@ -48,11 +37,11 @@ public class GameOfChess {
     //        + new Date().toString() + "\n");
      * 
      */
-    
-    //There should be no heavy computation in the JavaFX thread.
-    Player GAME_LOOP() {
-        return this.getWinner();
-    };
+	
+	@Override
+	public Player call() throws Exception {
+		return this.getWinner();
+	}
 
     /*
     public static void main(String[] args) {
@@ -123,6 +112,8 @@ public class GameOfChess {
             }
         }
     }
+
+
 
     
     /**

@@ -11,9 +11,9 @@ import com.google.gson.Gson;
 
 public class LoginHandler implements Runnable {
 
-	LinkedBlockingQueue<Socket> pendingLogins = new LinkedBlockingQueue<Socket>();
-	private Connection DB;
-	Gson gson = new Gson();
+	static LinkedBlockingQueue<Socket> pendingConnections = new LinkedBlockingQueue<Socket>();
+	private static Connection DB;
+	private static Gson gson = new Gson();
 
 	public LoginHandler() {
 		// Load SQLite driver
@@ -57,13 +57,17 @@ public class LoginHandler implements Runnable {
 		while (true) {
 			try {
 				System.out.println("LoginHandler ready for client connections...");
-				Socket potentialLogin = pendingLogins.take();
-				InputStreamReader isr = new InputStreamReader(potentialLogin.getInputStream());
+				Socket clientConnection = pendingConnections.take();
+				InputStreamReader isr = new InputStreamReader(clientConnection.getInputStream());
 				BufferedReader reader = new BufferedReader(isr);
 				String line = reader.readLine();
 				System.out.println(line);
-				AuthPair loginAttempt = gson.fromJson(line, AuthPair.class);
-				System.out.println("LoginHandler parsed AuthPair: " + loginAttempt);
+				AuthPair latestAuth = gson.fromJson(line, AuthPair.class);
+				System.out.println("LoginHandler parsed AuthPair: " + latestAuth);
+				
+				NetworkPlayer newGuy = new NetworkPlayer(latestAuth.getUsername(), true, clientConnection);
+				GameOfChess newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", false));
+				
 			} catch (InterruptedException | IOException e) {
 				e.printStackTrace();
 			}
