@@ -14,6 +14,8 @@ public class LoginHandler implements Runnable {
 	static LinkedBlockingQueue<Socket> pendingConnections = new LinkedBlockingQueue<Socket>();
 	private static Connection DB;
 	private static Gson gson = new Gson();
+	private static GamePool gamePool = new GamePool();
+	private static Thread gamePoolRunner = new Thread(gamePool);
 
 	public LoginHandler() {
 		// Load SQLite driver
@@ -49,7 +51,9 @@ public class LoginHandler implements Runnable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
+		System.out.println("Initializing GamePool...");
+		gamePoolRunner.start();
 	}
 
 	@Override
@@ -77,8 +81,8 @@ public class LoginHandler implements Runnable {
 			}
 			
 			try {
-				System.out.println("Network game created!  Starting now...");
-				System.out.println("The winner is: " + newGame.call());
+				System.out.println("Network game created!  Submitting to GamePool...");
+				gamePool.addGame(newGame);
 			}
 			catch (Exception e ) {
 				e.printStackTrace();
