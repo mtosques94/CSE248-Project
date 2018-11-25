@@ -23,7 +23,7 @@ import java.util.concurrent.Callable;
  *          
  */
 
-public class GameOfChess implements Callable<Player> {
+public class GameOfChess implements Callable<EndGameState> {
 	
 	Board BOARD;
 	
@@ -39,8 +39,11 @@ public class GameOfChess implements Callable<Player> {
      */
 	
 	@Override
-	public Player call() throws Exception {
-		return this.getWinner();
+	public EndGameState call() throws Exception {
+		Player winner = this.getWinner();
+		boolean wasDraw = winner instanceof ConsolePlayer && winner.name.equals("DRAW");
+		EndGameState theEnd = new EndGameState(BOARD.player1, BOARD.player2, winner, wasDraw);
+		return theEnd;
 	}
 
     /*
