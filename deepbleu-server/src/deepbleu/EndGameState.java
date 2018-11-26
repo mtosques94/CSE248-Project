@@ -1,7 +1,7 @@
 package deepbleu;
 
 public class EndGameState {
-	
+
 	private Player playerOne = null;
 	private Player playerTwo = null;
 	private Player winningPlayer = null;
@@ -13,13 +13,23 @@ public class EndGameState {
 		this.winningPlayer = winningPlayer;
 		this.wasDraw = wasDraw;
 	}
-	
+
 	public boolean wasDraw() {
 		return this.wasDraw;
 	}
-	
+
 	public Player getWinner() {
 		return this.winningPlayer;
+	}
+
+	public Player getLoser() {
+		if (this.wasDraw) {
+			return null;
+		}
+		if (playerOne == winningPlayer) {
+			return playerTwo;
+		}
+		return playerOne;
 	}
 
 }
