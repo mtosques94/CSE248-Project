@@ -12,7 +12,7 @@ public class GamePool implements Runnable {
 			.newFixedThreadPool(Math.max(Runtime.getRuntime().availableProcessors() - 0, 1));
 	// This has the completed work returned to a blocking queue in order of
 	// completion.
-	private static ExecutorCompletionService ECS = new ExecutorCompletionService(ES);
+	private static ExecutorCompletionService<EndGameState> ECS = new ExecutorCompletionService(ES);
 
 	public GamePool() {
 
@@ -26,7 +26,7 @@ public class GamePool implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				EndGameState mostRecentEndGame = (EndGameState) ECS.take().get();
+				EndGameState mostRecentEndGame = ECS.take().get();
 				System.out.println("GamePool says: " + mostRecentEndGame.getWinner() + " has won a match.");
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
