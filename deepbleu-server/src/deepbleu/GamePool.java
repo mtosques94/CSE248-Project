@@ -20,6 +20,8 @@ public class GamePool implements Runnable {
 	
 	public GamePool(int maxGames) {
 		GamePool.maxGames = maxGames;
+		GamePool.ES = Executors.newFixedThreadPool(maxGames);
+		ECS = new ExecutorCompletionService<EndGameState>(ES);
 	}
 
 	public void addGame(GameOfChess newGame) {
