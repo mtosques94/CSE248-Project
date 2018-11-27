@@ -14,44 +14,42 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 
 /**
- * A concurrent chess engine implementing Minimax with alpha-beta pruning. 
+ * A chess engine implementing Minimax with alpha-beta pruning. 
  * 
  * TO DO: 
  *      - Add option for iterative deepening w/ time constraints.
  *      - Improve board evaluation.
- *      - Implement Young Brothers Wait Concept or ABDADA algorithm.
  *      
  * @author Matthew Tosques
  */
 public class ComputerPlayer extends Player {
     
     //number of ply to look ahead
-    final static AtomicInteger DEPTH = new AtomicInteger(5); 
+    final AtomicInteger DEPTH = new AtomicInteger(5); 
     //incentivize high mobility boards / aim to restrict opponent's available moves
     //nasty performance hit but helpful
-    final static AtomicBoolean USE_MOBILITY_SCORING = new AtomicBoolean(true); 
+    final AtomicBoolean USE_MOBILITY_SCORING = new AtomicBoolean(true); 
 
     //Use as many threads as possible, up to the number of logical CPUs present
-    private static ExecutorService ES = Executors.newFixedThreadPool(
-            Math.max(Runtime.getRuntime().availableProcessors() - 0, 1));
+    private ExecutorService ES = Executors.newFixedThreadPool(1);
     //This has the completed work returned to a blocking queue in order of completion.
-    private static ExecutorCompletionService ECS = new ExecutorCompletionService(ES);
+    private ExecutorCompletionService ECS = new ExecutorCompletionService(ES);
     //The progress bar is bound to this value.
-    private final static ReadOnlyDoubleWrapper AI_PROGRESS = new ReadOnlyDoubleWrapper(0);
+    private final ReadOnlyDoubleWrapper AI_PROGRESS = new ReadOnlyDoubleWrapper(0);
     
     public ComputerPlayer(String name, boolean isWhite) {
         super(name, isWhite);
     }
     
-    public static ReadOnlyDoubleProperty progressProperty() {
+    public ReadOnlyDoubleProperty progressProperty() {
         return AI_PROGRESS;
     }
 
-    public static void selfDestruct() {
+    public void selfDestruct() {
         ES.shutdownNow();
     }
     
-    public static void reset() {
+    public void reset() {
         ES.shutdownNow();
         ES = Executors.newFixedThreadPool(
             Math.max(Runtime.getRuntime().availableProcessors() - 0, 1));
