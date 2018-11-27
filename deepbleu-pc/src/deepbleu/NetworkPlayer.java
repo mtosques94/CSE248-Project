@@ -11,13 +11,18 @@ import com.google.gson.Gson;
 
 public class NetworkPlayer extends Player {
 
-	Socket clientConnection = new Socket();
+	private Socket clientConnection = new Socket();
 	Gson gson = new Gson();
 
 	public NetworkPlayer(String name, boolean isWhite) {
 		super(name, isWhite);
 	}
-	
+
+	public NetworkPlayer(String name, boolean isWhite, Socket clientConnection) {
+		super(name, isWhite);
+		this.clientConnection = clientConnection;
+	}
+
 	public void connect() {
 		try {
 			InetAddress ia = InetAddress.getByName("localhost");
@@ -26,9 +31,9 @@ public class NetworkPlayer extends Player {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void connect(String addr, int port) {
 		try {
 			InetAddress ia = InetAddress.getByName(addr);
@@ -37,7 +42,11 @@ public class NetworkPlayer extends Player {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
+	}
+
+	public Socket getSocket() {
+		return this.clientConnection;
 	}
 
 	@Override
@@ -45,8 +54,10 @@ public class NetworkPlayer extends Player {
 		try {
 			InputStreamReader isr = new InputStreamReader(clientConnection.getInputStream());
 			BufferedReader reader = new BufferedReader(isr);
-			String line = reader.readLine();
-			System.out.println(line);
+			String line = null;
+			while (line == null)
+				line = reader.readLine();
+			System.out.println("Network player read this line: " + line);
 			ChessMove networkMove = gson.fromJson(line, ChessMove.class);
 			return networkMove;
 		} catch (IOException e) {

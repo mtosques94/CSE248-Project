@@ -1,5 +1,6 @@
 package deepbleu;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -36,6 +38,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
+import com.google.gson.Gson;
+
 /** ___ _____   @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@   @@@@@@@   @@@       @@@@@@@@  @@@  @@@
  * /\ (_)    \  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@       @@@@@@@@  @@@  @@@
   /  \      (_, @@!  @@@  @@!       @@!       @@!  @@@  @@!  @@@  @@!       @@!       @@!  @@@
@@ -61,11 +65,14 @@ public class GameOfChess extends Application {
 
     //The GUI works as a live view of the game for any combination of player types.
     static Player playerOne = new GUIPlayer("You", true);
-    static Player playerTwo = new ComputerPlayer("deepbleu", false);
+    static Player playerTwo = new NetworkPlayer("Network", false);
     static final Board BOARD = new Board(playerOne, playerTwo);
     static final ImageView CHECK_ICON = new ImageView(new Image("img/checkText.png"));
     static final TextArea MOVE_HISTORY = new TextArea(playerOne + " vs " + playerTwo + "\n"
             + new Date().toString() + "\n");
+    
+    static final Gson gson = new Gson();
+    
     //There should be no heavy computation in the JavaFX thread.
     static final Service<Void> GAME_LOOP = new Service<Void>() {
         @Override
@@ -87,6 +94,17 @@ public class GameOfChess extends Application {
 
     //GUI!
     public static void main(String[] args) {
+    	NetworkPlayer p2 = (NetworkPlayer) playerTwo;
+    	p2.connect();
+    	try {
+			BufferedWriter buffOut = new BufferedWriter(
+					new OutputStreamWriter( p2.getSocket().getOutputStream() ) );
+			String moveJson = "{ \"username\": \"john\", \"password\": \"doe\" }\n";
+			buffOut.write(moveJson);
+			buffOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         launch(args);
     }
 
@@ -117,7 +135,23 @@ public class GameOfChess extends Application {
             } else {
                 CHECK_ICON.setOpacity(0);
             }
-            playValidMove();
+            ChessMove mostRecentMove = playValidMove();
+            
+            //check for network players and send move as json
+            if(BOARD.currentPlayer instanceof NetworkPlayer) {
+            	NetworkPlayer otherGuy = (NetworkPlayer) BOARD.currentPlayer;
+                try {
+					BufferedWriter buffOut = new BufferedWriter(
+							new OutputStreamWriter( otherGuy.getSocket().getOutputStream() ) );
+					String moveJson = gson.toJson(mostRecentMove);
+					buffOut.write(moveJson);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+            }
+            
+            
             BOARD.updateGraphics();
         }
         return BOARD.getWinner();
@@ -126,7 +160,7 @@ public class GameOfChess extends Application {
     /**
      * Makes sure moves make sense before we send them to the board.
      */
-    static void playValidMove() {
+    static ChessMove playValidMove() {
         boolean valid = false;
         while (!valid) {
             System.out.println(BOARD);
@@ -147,11 +181,13 @@ public class GameOfChess extends Application {
                 MOVE_HISTORY.appendText(BOARD.currentPlayer + " moved " + potentialMove + "\n");
                 BOARD.move(potentialMove);
                 valid = true;
+                return potentialMove;
             } else {
                 System.out.println(BOARD);
                 System.out.println("Invalid move.");
             }
         }
+        return null;
     }
 
     /**
@@ -561,8 +597,8 @@ public class GameOfChess extends Application {
         });
 
         //The "New" button will load this SaveState
-        new ObjectOutputStream(new FileOutputStream("default.save"))
-                .writeObject(BOARD.getSaveState());
+        //new ObjectOutputStream(new FileOutputStream("default.save"))
+        //        .writeObject(BOARD.getSaveState());
 
         //All systems go
         primaryStage.show();
