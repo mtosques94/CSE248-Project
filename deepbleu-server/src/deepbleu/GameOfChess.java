@@ -86,7 +86,9 @@ public class GameOfChess implements Callable<EndGameState> {
             } else {
                 //CHECK_ICON.setOpacity(0);
             }
-            ChessMove mostRecentMove = playValidMove();
+            ChessMove mostRecentMove = new ChessMove(playValidMove());
+            mostRecentMove.enemyCaptured = null;
+            System.out.println("Valid move played.");
             //BOARD.updateGraphics();
             
             //check for network players and send move as json
@@ -97,6 +99,7 @@ public class GameOfChess implements Callable<EndGameState> {
 							new OutputStreamWriter( otherGuy.getSocket().getOutputStream() ) );
 					String moveJson = gson.toJson(mostRecentMove);
 					System.out.println("Writing ChessMove json to network...");
+					System.out.println(moveJson);
 					buffOut.write(moveJson);
 					buffOut.newLine();
 					buffOut.flush();

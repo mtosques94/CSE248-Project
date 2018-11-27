@@ -135,7 +135,9 @@ public class GameOfChess extends Application {
             } else {
                 CHECK_ICON.setOpacity(0);
             }
-            ChessMove mostRecentMove = playValidMove();
+            ChessMove mostRecentMove = new ChessMove(playValidMove());
+            mostRecentMove.enemyCaptured = null;
+            System.out.println("Valid move played.");
             
             //check for network players and send move as json
             if(BOARD.currentPlayer instanceof NetworkPlayer) {
@@ -145,6 +147,7 @@ public class GameOfChess extends Application {
 							new OutputStreamWriter( otherGuy.getSocket().getOutputStream() ) );
 					String moveJson = gson.toJson(mostRecentMove);
 					System.out.println("Writing ChessMove json to network...");
+					System.out.println(moveJson);
 					buffOut.write(moveJson);
 					buffOut.newLine();
 					buffOut.flush();
