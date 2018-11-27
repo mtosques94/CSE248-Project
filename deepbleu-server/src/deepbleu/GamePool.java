@@ -7,15 +7,19 @@ import java.util.concurrent.Executors;
 
 public class GamePool implements Runnable {
 
-	// Use as many threads as possible, up to the number of logical CPUs present
-	private static ExecutorService ES = Executors
-			.newFixedThreadPool(Math.max(Runtime.getRuntime().availableProcessors() - 0, 1));
-	// This has the completed work returned to a blocking queue in order of
-	// completion.
-	private static ExecutorCompletionService<EndGameState> ECS = new ExecutorCompletionService(ES);
+	private static int maxGames;
+
+	private static ExecutorService ES;
+	private static ExecutorCompletionService<EndGameState> ECS;
 
 	public GamePool() {
-
+		GamePool.maxGames = 10;
+		GamePool.ES = Executors.newFixedThreadPool(maxGames);
+		ECS = new ExecutorCompletionService<EndGameState>(ES);
+	}
+	
+	public GamePool(int maxGames) {
+		GamePool.maxGames = maxGames;
 	}
 
 	public void addGame(GameOfChess newGame) {
