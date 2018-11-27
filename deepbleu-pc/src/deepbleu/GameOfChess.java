@@ -99,8 +99,10 @@ public class GameOfChess extends Application {
     	try {
 			BufferedWriter buffOut = new BufferedWriter(
 					new OutputStreamWriter( p2.getSocket().getOutputStream() ) );
-			String moveJson = "{ \"username\": \"john\", \"password\": \"doe\" }\n";
+			AuthPair logMeIn = new AuthPair("john", "doe");
+			String moveJson = gson.toJson(logMeIn);
 			buffOut.write(moveJson);
+			buffOut.newLine();
 			buffOut.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
