@@ -54,6 +54,7 @@ public class NetworkPlayer extends Player {
 		try {
 			InputStreamReader isr = new InputStreamReader(clientConnection.getInputStream());
 			BufferedReader reader = new BufferedReader(isr);
+			System.out.println("NetworkPlayer trying to read line...");
 			String line = null;
 			while (line == null)
 				line = reader.readLine();

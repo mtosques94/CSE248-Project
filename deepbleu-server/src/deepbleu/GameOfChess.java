@@ -1,7 +1,12 @@
 package deepbleu;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
+
+import com.google.gson.Gson;
 
 /** ___ _____   @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@   @@@@@@@   @@@       @@@@@@@@  @@@  @@@
  * /\ (_)    \  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@       @@@@@@@@  @@@  @@@
@@ -26,6 +31,8 @@ import java.util.concurrent.Callable;
 public class GameOfChess implements Callable<EndGameState> {
 	
 	Board BOARD;
+	
+	Gson gson = new Gson();
 	
 	public GameOfChess(Player playerOne, Player playerTwo) {
 		BOARD = new Board(playerOne, playerTwo);
@@ -79,8 +86,27 @@ public class GameOfChess implements Callable<EndGameState> {
             } else {
                 //CHECK_ICON.setOpacity(0);
             }
-            playValidMove();
+            ChessMove mostRecentMove = playValidMove();
             //BOARD.updateGraphics();
+            
+            //check for network players and send move as json
+            if(BOARD.currentPlayer instanceof NetworkPlayer) {
+            	NetworkPlayer otherGuy = (NetworkPlayer) BOARD.currentPlayer;
+                try {
+					BufferedWriter buffOut = new BufferedWriter(
+							new OutputStreamWriter( otherGuy.getSocket().getOutputStream() ) );
+					String moveJson = gson.toJson(mostRecentMove);
+					System.out.println("Writing ChessMove json to network...");
+					buffOut.write(moveJson);
+					buffOut.newLine();
+					buffOut.flush();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+            }
+            
+            
         }
         return BOARD.getWinner();
     }
@@ -88,14 +114,14 @@ public class GameOfChess implements Callable<EndGameState> {
     /**
      * Makes sure moves make sense before we send them to the board.
      */
-    void playValidMove() {
+    ChessMove playValidMove() {
         boolean valid = false;
         while (!valid) {
             System.out.println(BOARD);
             System.out.println(this.BOARD.currentPlayer + "'s turn.  Total number of legal moves: "
                     + BOARD.getAllLegalMoves().size());
             ChessMove potentialMove = BOARD.currentPlayer.getMove(BOARD);
-            if (BOARD.currentPlayer instanceof ComputerPlayer || BOARD.currentPlayer instanceof GUIPlayer
+            if (!(BOARD.currentPlayer instanceof ConsolePlayer)
                     || BOARD.isLegalMove(potentialMove)) {
                 System.out.print("Final decision: " + BOARD.currentPlayer + " moved " + potentialMove + ".  \n");
                 for (Piece[] row : BOARD.tiles) {
@@ -109,11 +135,13 @@ public class GameOfChess implements Callable<EndGameState> {
                 //MOVE_HISTORY.appendText(BOARD.currentPlayer + " moved " + potentialMove + "\n");
                 BOARD.move(potentialMove);
                 valid = true;
+                return potentialMove;
             } else {
                 System.out.println(BOARD);
                 System.out.println("Invalid move.");
             }
         }
+        return null;
     }
 
 

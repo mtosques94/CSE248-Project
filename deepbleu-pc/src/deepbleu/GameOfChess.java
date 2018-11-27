@@ -144,7 +144,10 @@ public class GameOfChess extends Application {
 					BufferedWriter buffOut = new BufferedWriter(
 							new OutputStreamWriter( otherGuy.getSocket().getOutputStream() ) );
 					String moveJson = gson.toJson(mostRecentMove);
+					System.out.println("Writing ChessMove json to network...");
 					buffOut.write(moveJson);
+					buffOut.newLine();
+					buffOut.flush();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -167,7 +170,7 @@ public class GameOfChess extends Application {
             System.out.println(BOARD.currentPlayer + "'s turn.  Total number of legal moves: "
                     + BOARD.getAllLegalMoves().size());
             ChessMove potentialMove = BOARD.currentPlayer.getMove(BOARD);
-            if (BOARD.currentPlayer instanceof ComputerPlayer || BOARD.currentPlayer instanceof GUIPlayer
+            if (!(BOARD.currentPlayer instanceof ConsolePlayer)
                     || BOARD.isLegalMove(potentialMove)) {
                 System.out.print("Final decision: " + BOARD.currentPlayer + " moved " + potentialMove + ".  \n");
                 for (Piece[] row : BOARD.tiles) {

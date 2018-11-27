@@ -27,7 +27,8 @@ public class GamePool implements Runnable {
 		while (true) {
 			try {
 				EndGameState mostRecentEndGame = ECS.take().get();
-				System.out.println("GamePool says: " + mostRecentEndGame.getWinner() + " has won a match.");
+				System.out.println("GamePool says: " + mostRecentEndGame.getWinner() + " has won a match against "
+						+ mostRecentEndGame.getLoser() + ".");
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
