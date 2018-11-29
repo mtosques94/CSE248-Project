@@ -14,13 +14,13 @@ import java.util.HashSet;
 public class Board {
 
     //Toggle GUI response
-    private boolean enabled = true;
+    boolean enabled = true;
 
     //Toggle whether players are forced to exit check and if board prevents self inflicted check for ALL moves.
     //Otherwise self inflicted check is only prevented when moving one's King.
-    private static boolean AI_EXIT_CHECK = false; //NOT RECOMMENDED, code is way too slow.
+    static boolean AI_EXIT_CHECK = false; //NOT RECOMMENDED, code is way too slow.
     //AI doesn't need to be forced out anyway.
-    private static boolean GUI_EXIT_CHECK = true; //Restricting GUI moves works fine.
+    static boolean GUI_EXIT_CHECK = true; //Restricting GUI moves works fine.
 
 
     Piece[][] tiles = new Piece[8][8]; //A 2D array will provide modestly efficient lookup.
