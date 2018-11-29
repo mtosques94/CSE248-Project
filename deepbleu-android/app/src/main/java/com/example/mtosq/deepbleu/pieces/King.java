@@ -1,6 +1,5 @@
 package com.example.mtosq.deepbleu.pieces;
 
-
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
@@ -18,8 +17,8 @@ import java.util.HashSet;
  */
 public class King extends Piece {
 
-    static final Drawable DEFAULT_WHITE = null;
-    static final Drawable DEFAULT_BLACK = null;
+    private static final int DEFAULT_WHITE = R.drawable.whiteking;
+    private static final int DEFAULT_BLACK = R.drawable.blackking;
 
     public King(int x, int y, Player p) {
         super(x, y, p);
@@ -38,7 +37,7 @@ public class King extends Piece {
     }
 
     @Override
-    public Drawable getDefaultImage() {
+    public int getDefaultImage() {
         if(this.player.isWhite)
             return DEFAULT_WHITE;
         return DEFAULT_BLACK;

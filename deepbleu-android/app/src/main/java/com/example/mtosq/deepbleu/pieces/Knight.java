@@ -15,8 +15,8 @@ import java.util.HashSet;
  */
 public class Knight extends Piece {
 
-    static final Drawable DEFAULT_WHITE = null;
-    static final Drawable DEFAULT_BLACK = null;
+    private static final int DEFAULT_WHITE = R.drawable.whiteknight;
+    private static final int DEFAULT_BLACK = R.drawable.blackknight;
 
     public Knight(int x, int y, Player p) {
         super(x, y, p);
@@ -35,7 +35,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Drawable getDefaultImage() {
+    public int getDefaultImage() {
         if(this.player.isWhite)
             return DEFAULT_WHITE;
         return DEFAULT_BLACK;

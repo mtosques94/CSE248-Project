@@ -81,7 +81,7 @@ public abstract class Piece implements Serializable {
      * Return an image of this piece.
      * @return a JavaFX Image object representing this piece
      */
-    public abstract Drawable getDefaultImage();
+    public abstract int getDefaultImage();
 
     /**
      * A single character representing this piece.

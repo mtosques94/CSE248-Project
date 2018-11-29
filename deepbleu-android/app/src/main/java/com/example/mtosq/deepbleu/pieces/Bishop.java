@@ -11,14 +11,13 @@ import com.example.mtosq.deepbleu.R;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-
 /**
  * @author Matthew Tosques
  */
 public class Bishop extends Piece {
 
-    static final Drawable DEFAULT_WHITE = null;
-    static final Drawable DEFAULT_BLACK = null;
+    private static final int DEFAULT_WHITE = R.drawable.whitebishop;
+    private static final int DEFAULT_BLACK = R.drawable.blackbishop;
 
     static final int [][] ALL_DELTAS = new int[][] {{-1,1},{1,1},{1,-1},{-1,-1}};
 
@@ -39,7 +38,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public Drawable getDefaultImage() {
+    public int getDefaultImage() {
         if(this.player.isWhite)
             return DEFAULT_WHITE;
         return DEFAULT_BLACK;

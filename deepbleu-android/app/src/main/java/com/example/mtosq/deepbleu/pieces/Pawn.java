@@ -11,14 +11,13 @@ import com.example.mtosq.deepbleu.R;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-
 /**
  * @author Matthew Tosques
  */
 public class Pawn extends Piece {
 
-    static final Drawable DEFAULT_WHITE = null;
-    static final Drawable DEFAULT_BLACK = null;
+    private static final int DEFAULT_WHITE = R.drawable.whitepawn;
+    private static final int DEFAULT_BLACK = R.drawable.blackpawn;
 
     public Pawn(int x, int y, Player p) {
         super(x, y, p);
@@ -37,7 +36,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Drawable getDefaultImage() {
+    public int getDefaultImage() {
         if(this.player.isWhite)
             return DEFAULT_WHITE;
         return DEFAULT_BLACK;

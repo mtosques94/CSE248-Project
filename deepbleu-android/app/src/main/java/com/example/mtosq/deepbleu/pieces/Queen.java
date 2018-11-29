@@ -1,6 +1,5 @@
 package com.example.mtosq.deepbleu.pieces;
 
-
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
@@ -17,8 +16,8 @@ import java.util.HashSet;
  */
 public class Queen extends Piece {
 
-    static final Drawable DEFAULT_WHITE = null;
-    static final Drawable DEFAULT_BLACK = null;
+    private static final int DEFAULT_WHITE = R.drawable.whitequeen;
+    private static final int DEFAULT_BLACK = R.drawable.blackqueen;
 
     static final int[][] ALL_DELTAS = new int[][] {{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1}};
 
@@ -39,7 +38,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public Drawable getDefaultImage() {
+    public int getDefaultImage() {
         if(this.player.isWhite)
             return DEFAULT_WHITE;
         return DEFAULT_BLACK;
