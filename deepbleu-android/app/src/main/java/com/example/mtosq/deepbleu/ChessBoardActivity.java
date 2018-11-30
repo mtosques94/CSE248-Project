@@ -1,26 +1,43 @@
 package com.example.mtosq.deepbleu;
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
-import com.example.mtosq.deepbleu.pieces.Bishop;
-
-import java.lang.reflect.Field;
 import java.util.HashSet;
 
 public class ChessBoardActivity extends AppCompatActivity {
 
-    static Player playerOne = new GUIPlayer("You",true);
-    static Player playerTwo = new GUIPlayer("Opponent",false);
+    private Player playerOne = new GUIPlayer("You",true);
+    private Player playerTwo = new GUIPlayer("Opponent",false);
 
-    static Board board = new Board(playerOne, playerTwo);
-    static ImageView[][] ImageBoard;
+    private Board board = new Board(playerOne, playerTwo);
+    private ImageView[][] ImageBoard;
+    //this gives the updateGraphics method something to look at without race conditions
+    private Piece[][] myBoard = new Piece[8][8];
+
+    private Runnable updateGraphics = new Runnable() {
+        @Override
+        public void run() {
+
+            System.out.println("START GFX UPDATE");
+
+            for(int x=0;x<8;x++) {
+                for (int y = 0; y < 8; y++) {
+                    ImageView iv = ImageBoard[x][y];
+                    if(myBoard[x][y] == null) {
+                        iv.setImageResource(R.drawable.transparent);
+                    }
+                    else {
+                        iv.setImageResource(myBoard[x][y].getDefaultImage());
+                    }
+                }
+            }
+
+            System.out.println("END GFX UPDATE");
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +90,7 @@ public class ChessBoardActivity extends AppCompatActivity {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                ChessBoardActivity.getWinner();
+                ChessBoardActivity.this.getWinner();
             }
         };
 
@@ -81,36 +98,21 @@ public class ChessBoardActivity extends AppCompatActivity {
         t.start();
     }
 
-    public static void updateGraphics() {
+    public void updateGraphics() {
+
         for(int x=0;x<8;x++) {
             for (int y = 0; y < 8; y++) {
-                ImageView iv = ImageBoard[x][y];
-                if(board.tiles[x][y] == null) {
-                    iv.setImageResource(R.drawable.transparent);
-                }
-                else {
-                    iv.setImageResource(board.tiles[x][y].getDefaultImage());
-                }
+                myBoard[x][y] = board.tiles[x][y];
             }
         }
 
+        runOnUiThread(updateGraphics);
     }
 
-    public static int getResId(String resName, Class<?> c) {
-
-        try {
-            Field idField = c.getDeclaredField(resName);
-            return idField.getInt(idField);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    /**
+     /**
      * Allows legal moves until checkmate or draw. Returns the winning player.
      */
-    static Player getWinner() {
+     Player getWinner() {
         while (!(board.hasDraw() || board.kingCaptured())) {
             HashSet<ChessMove> allLegalMoves = board.getAllLegalMoves();
             if (allLegalMoves.isEmpty()) {
@@ -143,7 +145,7 @@ public class ChessBoardActivity extends AppCompatActivity {
     /**
      * Makes sure moves make sense before we send them to the board.
      */
-    static void playValidMove() {
+    void playValidMove() {
         boolean valid = false;
         while (!valid) {
             System.out.println(board);
@@ -170,6 +172,5 @@ public class ChessBoardActivity extends AppCompatActivity {
             }
         }
     }
-
 
 }
