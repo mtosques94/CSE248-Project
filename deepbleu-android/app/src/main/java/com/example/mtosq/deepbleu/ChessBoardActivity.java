@@ -9,7 +9,7 @@ import java.util.HashSet;
 public class ChessBoardActivity extends AppCompatActivity {
 
     private Player playerOne = new GUIPlayer("You",true);
-    private Player playerTwo = new GUIPlayer("Opponent",false);
+    private Player playerTwo = new ComputerPlayer("deepbleu",false);
 
     private Board board = new Board(playerOne, playerTwo);
     private ImageView[][] ImageBoard;
