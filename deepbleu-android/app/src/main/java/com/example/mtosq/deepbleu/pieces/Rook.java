@@ -1,8 +1,5 @@
 package com.example.mtosq.deepbleu.pieces;
 
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-
 import com.example.mtosq.deepbleu.Board;
 import com.example.mtosq.deepbleu.Piece;
 import com.example.mtosq.deepbleu.Player;
