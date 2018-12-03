@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try  {
                     NetworkPlayer p2n = (NetworkPlayer) p2;
-                    p2n.connect("10.0.2.2", 1994, "jane", "doe");
+                    p2n.connect("10.0.2.2", 1994, username, password);
                     
                     Intent intent = new Intent (LoginActivity.this, ChessBoardActivity.class);
                     intent.putExtra("p1", p1);

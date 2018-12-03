@@ -44,7 +44,7 @@ public class LoginHandler implements Runnable {
 
 			System.out.println("Working with the following AuthPairs:");
 			while (r.next()) {
-				System.out.print(r.getString("name") + " ");
+				System.out.print(r.getString("username") + " ");
 				System.out.println(r.getString("password"));
 			}
 			System.out.println("-----end of DB-----");
@@ -64,7 +64,7 @@ public class LoginHandler implements Runnable {
 			GameOfChess newGame = null;
 			
 			try {
-				System.out.println("LoginHandler ready for client connections...");
+				System.out.println("LoginHandler ready for client connection...");
 				Socket clientConnection = pendingConnections.take();
 				InputStreamReader isr = new InputStreamReader(clientConnection.getInputStream());
 				BufferedReader reader = new BufferedReader(isr);
@@ -72,21 +72,45 @@ public class LoginHandler implements Runnable {
 				System.out.println(line);
 				AuthPair latestAuth = gson.fromJson(line, AuthPair.class);
 				System.out.println("LoginHandler parsed AuthPair: " + latestAuth);
+				
+				String sql = "SELECT * FROM Players WHERE username='" + latestAuth.getUsername()
+					+ "' AND password= '" + latestAuth.getPassword() + "'\r\n";
+				PreparedStatement p = null;
+				ResultSet r = null;
+				try {
+					p = DB.prepareStatement(sql);
+					p.clearParameters();
+					r = p.executeQuery();
 
-				newGuy = new NetworkPlayer(latestAuth.getUsername(), true, clientConnection);
-				newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", false));
+					if (!r.isBeforeFirst()) {
+						System.out.println(latestAuth.toString() + " NOT FOUND");
+						clientConnection.close();
+					}
+					else {
+						
+						System.out.print(r.getString("username") + " ");
+						System.out.println(r.getString("password"));
+						
+						newGuy = new NetworkPlayer(latestAuth.getUsername(), true, clientConnection);
+						newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", false));
+						try {
+							System.out.println("Network game created!  Submitting to GamePool...");
+							gamePool.addGame(newGame);
+						}
+						catch (Exception e ) {
+							e.printStackTrace();
+						}
+					}
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 
 			} catch (InterruptedException | IOException e) {
 				e.printStackTrace();
 			}
 			
-			try {
-				System.out.println("Network game created!  Submitting to GamePool...");
-				gamePool.addGame(newGame);
-			}
-			catch (Exception e ) {
-				e.printStackTrace();
-			}
+			
 		}
 
 	}
