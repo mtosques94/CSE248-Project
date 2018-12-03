@@ -8,10 +8,10 @@ import java.util.HashSet;
 
 public class ChessBoardActivity extends AppCompatActivity {
 
-    private Player playerOne = new GUIPlayer("You",true);
-    private Player playerTwo = new ComputerPlayer("deepbleu",false);
+    private Player playerOne = null;
+    private Player playerTwo = null;
 
-    private Board board = new Board(playerOne, playerTwo);
+    private Board board = null;
     private ImageView[][] ImageBoard;
     //this gives the updateGraphics method something to look at without race conditions
     private Piece[][] myBoard = new Piece[8][8];
@@ -43,7 +43,11 @@ public class ChessBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chess_board);
+        playerOne = (GUIPlayer) getIntent().getSerializableExtra("p1");
 
+        playerTwo = new NetworkPlayer("Server", false);
+
+        board = new Board(playerOne,playerTwo);
         ImageBoard = new ImageView[8][8];
         for(int x=0;x<8;x++) {
             for(int y=0;y<8;y++) {
@@ -87,6 +91,9 @@ public class ChessBoardActivity extends AppCompatActivity {
 
             }
         }
+
+        this.updateGraphics();
+
         Runnable r = new Runnable() {
             @Override
             public void run() {
