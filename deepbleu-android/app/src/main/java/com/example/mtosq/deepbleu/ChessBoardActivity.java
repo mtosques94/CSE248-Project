@@ -43,7 +43,9 @@ public class ChessBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chess_board);
-        playerOne = (GUIPlayer) getIntent().getSerializableExtra("p1");
+        //playerOne = (GUIPlayer) getIntent().getSerializableExtra("p1");
+
+        playerOne = new ComputerPlayer("localAI", true);
 
         playerTwo = new NetworkPlayer("Server", false);
 

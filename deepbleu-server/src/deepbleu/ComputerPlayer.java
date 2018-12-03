@@ -31,7 +31,7 @@ public class ComputerPlayer extends Player {
     final AtomicBoolean USE_MOBILITY_SCORING = new AtomicBoolean(true); 
 
     //Use as many threads as possible, up to the number of logical CPUs present
-    private ExecutorService ES = Executors.newFixedThreadPool(1);
+    private ExecutorService ES = Executors.newFixedThreadPool(4);
     //This has the completed work returned to a blocking queue in order of completion.
     private ExecutorCompletionService ECS = new ExecutorCompletionService(ES);
     //The progress bar is bound to this value.
