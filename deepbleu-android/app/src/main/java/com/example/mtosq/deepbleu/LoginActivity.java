@@ -35,19 +35,16 @@ public class LoginActivity extends AppCompatActivity {
         Player p1 = new GUIPlayer(username, true);
         Player p2 = new NetworkPlayer("Server", false);
 
-        Thread loginThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    NetworkPlayer p2n = (NetworkPlayer) p2;
-                    p2n.connect("10.0.2.2", 1994, username, password);
-                    
-                    Intent intent = new Intent (LoginActivity.this, ChessBoardActivity.class);
-                    intent.putExtra("p1", p1);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        Thread loginThread = new Thread(() -> {
+            try  {
+                NetworkPlayer p2n = (NetworkPlayer) p2;
+                p2n.connect("10.0.2.2", 1994, username, password);
+
+                Intent intent = new Intent (LoginActivity.this, ChessBoardActivity.class);
+                intent.putExtra("p1", p1);
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
