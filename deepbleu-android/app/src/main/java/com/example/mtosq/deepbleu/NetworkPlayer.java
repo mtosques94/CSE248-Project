@@ -25,7 +25,13 @@ public class NetworkPlayer extends Player {
 
     public NetworkPlayer(String name, boolean isWhite, Socket clientConnection) {
         super(name, isWhite);
-        clientConnection = clientConnection;
+        NetworkPlayer.clientConnection = clientConnection;
+        try {
+            buffIn = new BufferedReader(new InputStreamReader(clientConnection.getInputStream()));
+            buffOut = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void connect() {
@@ -99,7 +105,7 @@ public class NetworkPlayer extends Player {
 
     @Override
     public ChessMove getMove(Board b) {
-        if(b.moveHistory.size() > 0) {
+        if (b.moveHistory.size() > 0) {
             ChessMove mostRecentMove = new ChessMove(b.moveHistory.get(b.moveHistory.size() - 1));
             mostRecentMove.enemyCaptured = null;
             this.writeJson(mostRecentMove);

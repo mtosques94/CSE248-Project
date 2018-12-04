@@ -1,6 +1,5 @@
 package deepbleu;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -95,18 +93,7 @@ public class GameOfChess extends Application {
     //GUI!
     public static void main(String[] args) {
     	NetworkPlayer p2 = (NetworkPlayer) playerTwo;
-    	p2.connect();
-    	try {
-			BufferedWriter buffOut = new BufferedWriter(
-					new OutputStreamWriter( p2.getSocket().getOutputStream() ) );
-			AuthPair logMeIn = new AuthPair("john", "doe");
-			String moveJson = gson.toJson(logMeIn);
-			buffOut.write(moveJson);
-			buffOut.newLine();
-			buffOut.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	p2.connect("localhost", 1994, "admin", "password");
         launch(args);
     }
 
@@ -137,29 +124,8 @@ public class GameOfChess extends Application {
             } else {
                 CHECK_ICON.setOpacity(0);
             }
-            ChessMove mostRecentMove = new ChessMove(playValidMove());
-            mostRecentMove.enemyCaptured = null;
-            System.out.println("Valid move played.");
-            
-            //check for network players and send move as json
-            if(BOARD.currentPlayer instanceof NetworkPlayer) {
-            	NetworkPlayer otherGuy = (NetworkPlayer) BOARD.currentPlayer;
-                try {
-					BufferedWriter buffOut = new BufferedWriter(
-							new OutputStreamWriter( otherGuy.getSocket().getOutputStream() ) );
-					String moveJson = gson.toJson(mostRecentMove);
-					System.out.println("Writing ChessMove json to network...");
-					System.out.println(moveJson);
-					buffOut.write(moveJson);
-					buffOut.newLine();
-					buffOut.flush();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-            }
-            
-            
+            playValidMove();
+            System.out.println("Valid move played.");            
             BOARD.updateGraphics();
         }
         return BOARD.getWinner();

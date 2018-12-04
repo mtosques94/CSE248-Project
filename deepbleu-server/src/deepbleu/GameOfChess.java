@@ -1,8 +1,5 @@
 package deepbleu;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
 
@@ -67,28 +64,8 @@ public class GameOfChess implements Callable<EndGameState> {
                     return BOARD.getWinner();
                 }
             }
-            ChessMove mostRecentMove = new ChessMove(playValidMove());
-            mostRecentMove.enemyCaptured = null;
-            System.out.println("Valid move played.");
-            
-            //check for network players and send move as json
-            if(BOARD.currentPlayer instanceof NetworkPlayer) {
-            	NetworkPlayer otherGuy = (NetworkPlayer) BOARD.currentPlayer;
-                try {
-					BufferedWriter buffOut = new BufferedWriter(
-							new OutputStreamWriter( otherGuy.getSocket().getOutputStream() ) );
-					String moveJson = gson.toJson(mostRecentMove);
-					System.out.println("Writing ChessMove json to network...");
-					System.out.println(moveJson);
-					buffOut.write(moveJson);
-					buffOut.newLine();
-					buffOut.flush();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-            }
-            
+            playValidMove();
+            System.out.println("Valid move played.");           
             
         }
         return BOARD.getWinner();
