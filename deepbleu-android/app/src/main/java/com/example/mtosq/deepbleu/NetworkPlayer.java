@@ -83,7 +83,8 @@ public class NetworkPlayer extends Player {
     @Override
     public ChessMove getMove(Board b) {
         try {
-            ChessMove mostRecentMove = b.moveHistory.get(b.moveHistory.size()-1);
+            ChessMove mostRecentMove = new ChessMove(b.moveHistory.get(b.moveHistory.size()-1));
+            mostRecentMove.enemyCaptured = null;
             gson.toJson(mostRecentMove);
             try {
                 BufferedWriter buffOut = new BufferedWriter(
