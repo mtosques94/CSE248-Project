@@ -13,9 +13,9 @@ import com.google.gson.Gson;
 
 public class NetworkPlayer extends Player {
 
-	private static Socket clientConnection = new Socket();
-	private static BufferedReader buffIn = null;
-	private static BufferedWriter buffOut = null;
+	private Socket clientConnection = new Socket();
+	private BufferedReader buffIn = null;
+	private BufferedWriter buffOut = null;
 
 	Gson gson = new Gson();
 
@@ -25,7 +25,7 @@ public class NetworkPlayer extends Player {
 
 	public NetworkPlayer(String name, boolean isWhite, Socket clientConnection) {
 		super(name, isWhite);
-		NetworkPlayer.clientConnection = clientConnection;
+		this.clientConnection = clientConnection;
 		try {
 			buffIn = new BufferedReader(new InputStreamReader(clientConnection.getInputStream()));
 			buffOut = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()));
