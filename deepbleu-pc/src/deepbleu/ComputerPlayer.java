@@ -33,9 +33,9 @@ public class ComputerPlayer extends Player {
 
     //Use as many threads as possible, up to the number of logical CPUs present
     private static ExecutorService ES = Executors.newFixedThreadPool(
-            Math.max(Runtime.getRuntime().availableProcessors() - 0, 1));
+            Math.min(Runtime.getRuntime().availableProcessors(), 4));
     //This has the completed work returned to a blocking queue in order of completion.
-    private static ExecutorCompletionService ECS = new ExecutorCompletionService(ES);
+    private static ExecutorCompletionService<CompletedWork> ECS = new ExecutorCompletionService<>(ES);
     //The progress bar is bound to this value.
     private final static ReadOnlyDoubleWrapper AI_PROGRESS = new ReadOnlyDoubleWrapper(0);
     
@@ -51,12 +51,12 @@ public class ComputerPlayer extends Player {
         ES.shutdownNow();
     }
     
-    public static void reset() {
-        ES.shutdownNow();
-        ES = Executors.newFixedThreadPool(
-            Math.max(Runtime.getRuntime().availableProcessors() - 0, 1));
-        ECS = new ExecutorCompletionService(ES);    
-    }
+	public static void reset() {
+		ES.shutdownNow();
+		ES = Executors.newFixedThreadPool(
+				Math.min(Runtime.getRuntime().availableProcessors(), 4));
+		ECS = new ExecutorCompletionService<>(ES);
+	}
     
     @Override
     public ChessMove getMove(Board b) {
@@ -70,8 +70,8 @@ public class ComputerPlayer extends Player {
             ECS.submit(new AITask(b, potentialMove, this, setDepth, useMobility));
             b.undoLastMove();
         }
-        //Assume the worst and update the intended move anytime a better option is found.
-        ArrayList<CompletedWork> scores = new ArrayList();
+        //Assume the worst and update the intended move any time a better option is found.
+        ArrayList<CompletedWork> scores = new ArrayList<>();
         CompletedWork bestScore = new CompletedWork(new ChessMove(-1, -1, -1, -1), AITask.LOSE);
         //If we're really in some sort of bind, this will stop us from returning null.
         //Also seems to add some variety in the case that all moves score equally, at least on Windows.
@@ -84,7 +84,7 @@ public class ComputerPlayer extends Player {
         double total = legalMoves.size();
         while (scores.size() < legalMoves.size()) {
             try {
-                CompletedWork mostRecentlyCompleted = (CompletedWork) ECS.take().get();
+                CompletedWork mostRecentlyCompleted = ECS.take().get();
                 ChessMove rootMove = mostRecentlyCompleted.getRootMove();
                 
                 //bellow are some dubious first attempts at making scores reflect both the game tree
@@ -136,7 +136,7 @@ public class ComputerPlayer extends Player {
 /**
  * A callable task that computes the game tree of a given board to a given depth. 
  */
-class AITask implements Callable {
+class AITask implements Callable<CompletedWork> {
     
     private int MAX_DEPTH;
     private final boolean MOBILITY_SCORING;
@@ -184,7 +184,7 @@ class AITask implements Callable {
     }
 
     @Override
-    public Object call() throws Exception {
+    public CompletedWork call() throws Exception {
         //Starting tree as minimizing player because we have already performed our move in ComputerPlayer.getMove()
         return new CompletedWork(moveBeingTried, evalMove(b, MAX_DEPTH - 1, LOSE, WIN, false));
     }

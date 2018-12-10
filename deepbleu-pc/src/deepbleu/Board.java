@@ -343,7 +343,7 @@ public class Board extends GridPane {
      * @return HashSet of every legal move for current player.
      */
     public HashSet<ChessMove> getAllLegalMoves(boolean checkForCheck) {
-        HashSet<ChessMove> allLegalMoves = new HashSet();
+        HashSet<ChessMove> allLegalMoves = new HashSet<>(86); //86 = (64 / .75) + 1
         for (Piece[] row : tiles) 
             for (Piece p : row) 
                 if (p != null && p.belongsToCurrentPlayer(this)) 
