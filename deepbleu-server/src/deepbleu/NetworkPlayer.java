@@ -91,12 +91,13 @@ public class NetworkPlayer extends Player {
 
 	public String readLine() {
 		String line = null;
-
+		
 		while (line == null) {
 			try {
 				line = buffIn.readLine();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return null;
 			}
 		}
 		System.out.println("Network player read this line: " + line);
