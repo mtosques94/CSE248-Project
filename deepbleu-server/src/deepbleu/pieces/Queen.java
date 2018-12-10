@@ -4,6 +4,7 @@ import deepbleu.Board;
 import deepbleu.Piece;
 import deepbleu.Player;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 /**
@@ -85,7 +86,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public HashSet<int[]> getLegalMoves(Board b) {
+    public Collection<int[]> getLegalMoves(Board b) {
         HashSet<int[]> legalMoves = new HashSet();        
         int deltaX, deltaY; int _deltaX, _deltaY;
         for(int[] delta : ALL_DELTAS) {

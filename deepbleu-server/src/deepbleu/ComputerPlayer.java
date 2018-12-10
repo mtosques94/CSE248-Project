@@ -2,7 +2,7 @@ package deepbleu;
 
 import deepbleu.pieces.*;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
@@ -62,7 +62,7 @@ public class ComputerPlayer extends Player {
         boolean useMobility = USE_MOBILITY_SCORING.get();
         AI_PROGRESS.set(0);
         //For each legal move, submit an AITask to the pool for immediate processing.
-        HashSet<ChessMove> legalMoves = b.getAllLegalMoves();
+        Collection<ChessMove> legalMoves = b.getAllLegalMoves();
         for (ChessMove potentialMove : legalMoves) {
             b.move(potentialMove);
             ECS.submit(new AITask(b, potentialMove, this, setDepth, useMobility));
@@ -196,7 +196,7 @@ class AITask implements Callable {
             return evalBoard(b);
         if (max) { //Maximizing player, aka the AI.  Always wants the best possible outcome.
             score = LOSE;
-            HashSet<ChessMove> legalMoves = b.getAllLegalMoves();
+            Collection<ChessMove> legalMoves = b.getAllLegalMoves();
             for (ChessMove potentialMove : legalMoves) {
                 b.move(potentialMove);
                 //check for win
@@ -215,7 +215,7 @@ class AITask implements Callable {
             return score;
         } else { //The minimizing player aka opponent.  Always wants the WORST outcome for the AI.
             score = WIN;
-            HashSet<ChessMove> legalMoves = b.getAllLegalMoves();
+            Collection<ChessMove> legalMoves = b.getAllLegalMoves();
             for (ChessMove potentialMove : legalMoves) {
                 b.move(potentialMove);
                 //check for loss

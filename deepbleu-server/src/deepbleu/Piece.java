@@ -1,7 +1,7 @@
 package deepbleu;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.Collection;
 
 /**
  * Abstract representation of a chess piece. 
@@ -80,7 +80,7 @@ public abstract class Piece implements Serializable {
      * Return every legal move for this piece.
      * @return HashSet of every legal destination for this piece
      */
-    public abstract HashSet<int[]> getLegalMoves(Board b);
+    public abstract Collection<int[]> getLegalMoves(Board b);
     
     /**
      * Return an image of this piece.

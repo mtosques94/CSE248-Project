@@ -4,6 +4,7 @@ import deepbleu.Board;
 import deepbleu.Piece;
 import deepbleu.Player;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 /**
@@ -74,7 +75,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public HashSet<int[]> getLegalMoves(Board b) {
+    public Collection<int[]> getLegalMoves(Board b) {
         HashSet<int[]> legalMoves = new HashSet();
         if(this.player.isWhite){
             if (this.canMoveToLocation(this.x-1, this.y, b, true))

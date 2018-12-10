@@ -5,6 +5,7 @@ import deepbleu.ChessMove;
 import deepbleu.Piece;
 import deepbleu.Player;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 //import javafx.scene.image.Image;
 
@@ -79,7 +80,7 @@ public class King extends Piece {
     }
 
     @Override
-    public HashSet<int[]> getLegalMoves(Board b) {
+    public Collection<int[]> getLegalMoves(Board b) {
         HashSet<int[]> legalMoves = new HashSet();
         if (this.canMoveToLocation(this.x-1, this.y-1,b, true))
             legalMoves.add(new int[] {this.x-1,this.y-1});

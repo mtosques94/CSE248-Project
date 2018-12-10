@@ -3,6 +3,7 @@ package deepbleu;
 import deepbleu.pieces.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 
 /**       
@@ -342,7 +343,7 @@ public class Board {
      * @param checkForCheck whether to prevent self inflicted check / force player out of check
      * @return HashSet of every legal move for current player.
      */
-    public HashSet<ChessMove> getAllLegalMoves(boolean checkForCheck) {
+    public Collection<ChessMove> getAllLegalMoves(boolean checkForCheck) {
         HashSet<ChessMove> allLegalMoves = new HashSet();
         for (Piece[] row : tiles) 
             for (Piece p : row) 
@@ -360,7 +361,7 @@ public class Board {
      * Convenience method: by default respect rules of check
      * @return HashSet of every legal move for current player.
      */
-    public HashSet<ChessMove> getAllLegalMoves() {
+    public Collection<ChessMove> getAllLegalMoves() {
         return this.getAllLegalMoves(true);
     }
     

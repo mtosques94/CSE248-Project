@@ -1,6 +1,6 @@
 package deepbleu;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import com.google.gson.Gson;
@@ -45,7 +45,7 @@ public class GameOfChess implements Callable<EndGameState> {
      */
     Player getWinner() {
         while (!(BOARD.hasDraw() || BOARD.kingCaptured())) {
-            HashSet<ChessMove> allLegalMoves = BOARD.getAllLegalMoves();
+            Collection<ChessMove> allLegalMoves = BOARD.getAllLegalMoves();
             if (allLegalMoves.isEmpty()) {
                 return this.BOARD.getWinner();
             }
