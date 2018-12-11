@@ -1,0 +1,25 @@
+deepbleu API
+
+client
+	connect to server on port 1994
+	send user info as AuthPair JSON
+	begin sending / receiving ChessMoves as JSON
+	if win:
+		bug
+	if lose:
+		game ends
+
+server
+
+	receive connection on port 1994
+	expect valid AuthPair JSON
+	begin receiving / sending ChessMoves as JSON
+	if win:
+		send wining move, end game.
+	if lose:
+		clientside bug forbids this
+
+to do:
+	login handshake
+	clientside must send winning move before ending game
+	disconnect messages
