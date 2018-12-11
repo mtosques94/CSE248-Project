@@ -12,9 +12,6 @@ import java.util.HashSet;
  */
 public class Knight extends Piece {
     
-    //static final Image DEFAULT_WHITE = new Image("/img/small/WhiteKnight.png");
-    //static final Image DEFAULT_BLACK = new Image("/img/small/BlackKnight.png");
-
     public Knight(int x, int y, Player p) {
         super(x, y, p);
     }
@@ -31,15 +28,6 @@ public class Knight extends Piece {
         return 'n';
     }
     
-    /*
-    @Override
-        public Image getDefaultImage() {
-        if(this.player.isWhite)
-            return DEFAULT_WHITE;
-        return DEFAULT_BLACK;
-    }
-    */
-
     @Override
     public boolean canMoveToLocation(int x, int y, Board b, boolean ignoreTurns) {
         if (super.canMoveToLocation(x, y, b, ignoreTurns)) { //basics

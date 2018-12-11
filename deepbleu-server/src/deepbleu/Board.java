@@ -14,30 +14,11 @@ import java.util.HashSet;
  */
 public class Board {
     
-    //Toggle GUI response
-    private boolean enabled = true;
-    
     //Toggle whether players are forced to exit check and if board prevents self inflicted check for ALL moves.
     //Otherwise self inflicted check is only prevented when moving one's King.
     private static boolean AI_EXIT_CHECK = false; //NOT RECOMMENDED, code is way too slow. 
                                                   //AI doesn't need to be forced out anyway.
     private static boolean GUI_EXIT_CHECK = true; //Restricting GUI moves works fine.
-    
-    /*
-    //Background tile images
-    private static final Image TILE_LIGHT = new Image("/img/small/PureWhite.png"); //Image for light tile
-    private static final Image TILE_DARK = new Image("/img/small/PureGrey.png"); //Image for dark tile
-    //Transparent image, sits on top of tile if there is no piece
-    private static final Image TILE_BLANK = new Image("img/small/Transparent.png"); 
-    //Lighting for hightlighting tiles & pieces
-    private static final Lighting DEFAULT_LIGHTING = new Lighting(); 
-    private static final Lighting PICKUP_LIGHTING = new Lighting();
-    private static final Lighting LEGALMOVE_LIGHTING = new Lighting();
-    private static final Lighting CHECK_LIGHTING = new Lighting();
-    private static final Color PICKUP_COLOR = Color.CYAN;
-    private static final Color LEGALMOVE_COLOR = Color.GREEN;
-    private static final Color CHECK_COLOR = Color.RED;
-    */
     
     Piece[][] tiles = new Piece[8][8]; //A 2D array will provide modestly efficient lookup.
     ArrayList<ChessMove> moveHistory = new ArrayList(); //Every canon move since the game began.
@@ -46,23 +27,6 @@ public class Board {
     Player player1, player2, currentPlayer; //The two players, and a reference indicating who's turn it is.
     Piece selected = null; //The most recent valid piece clicked by a GUIPlayer.
     
-    /**
-     * Apply lighting effects.
-     */
-    /*
-    private static void initLighting() {
-        PICKUP_LIGHTING.setLight(new Light.Distant(45, 45, PICKUP_COLOR));
-        PICKUP_LIGHTING.setSurfaceScale(2);
-        PICKUP_LIGHTING.setDiffuseConstant(1);
-        LEGALMOVE_LIGHTING.setLight(new Light.Distant(45, 45, LEGALMOVE_COLOR));
-        LEGALMOVE_LIGHTING.setSurfaceScale(2);
-        LEGALMOVE_LIGHTING.setDiffuseConstant(1);
-        CHECK_LIGHTING.setLight(new Light.Distant(45, 45, CHECK_COLOR));
-        CHECK_LIGHTING.setSurfaceScale(2);
-        CHECK_LIGHTING.setDiffuseConstant(1);
-    }
-    */
-
     /**
      * Board constructor.  Takes two players.
      * Arranges pieces for a new game and configures the GUI.
@@ -104,68 +68,6 @@ public class Board {
         inPlay.add(new Rook(0, 7, p2));
         //Convert ArrayList to 2d array of pieces.
         inPlay.forEach((p) -> {tiles[p.x][p.y] = p;});
-        //Add background tiles
-        /*
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                if (i % 2 == 0) { //even rows start with dark tile
-                    if (j % 2 == 0) {
-                        this.add(new ImageView(TILE_DARK), i, j);
-                    } else {
-                        this.add(new ImageView(TILE_LIGHT), i, j);
-                    }
-                } else { //odd rows start with light tile
-                    if (j % 2 != 0) {
-                        this.add(new ImageView(TILE_DARK), i, j);
-                    } else {
-                        this.add(new ImageView(TILE_LIGHT), i, j);
-                    }
-                }
-            }
-        }
-        
-        //Create and add ImageViews to this board since it's a GridPane.
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                Piece p = tiles[i][j];
-                ImageView tileView;
-                if(p == null) { //add blank tiles
-                    tileView = new ImageView(TILE_BLANK);
-                    this.add(tileView, j, i);
-                } else { //or load appropriate image of piece
-                    tileView = new ImageView(p.getDefaultImage());
-                    this.add(tileView, p.y, p.x);
-                }
-                final ImageView TileView = tileView;
-                final int x = i;
-                final int y = j;
-                //Respond to mouse events
-                TileView.setOnMouseClicked(event -> {
-                        if (currentPlayer instanceof GUIPlayer && this.enabled) { 
-                            if (tiles[x][y] != null
-                                    && tiles[x][y].belongsToCurrentPlayer(this)) {//if you click on your own piece
-                                this.selected = tiles[x][y]; //you pick it up
-                                this.updateGraphics();
-                            } else  { // if you click on an empty tile or an enemy
-                                if (this.selected != null) { //and you have selected something already
-                                    if (this.selected.canMoveToLocation(x, y, this) //if you can move it there
-                                            && (!GUI_EXIT_CHECK
-                                            || !this.causesCheck(new ChessMove(selected.x,selected.y,x,y)))) { 
-                                        System.out.println("Adding move.");
-                                        GUIPlayer.PUT_MOVE_HERE.add( //do it
-                                                new ChessMove(this.selected.x,this.selected.y,x,y));
-                                        this.selected = null; //deselect piece after move
-                                    }
-                                }
-                            }
-                        }
-                    });
-                TileView.setPickOnBounds(true); //ignore png transparency for mouse events
-            }
-        }
-        this.setGridLinesVisible(true); //works for now
-        this.updateGraphics(); //apply lighting
-        */ 
     }
 
     /**
@@ -341,7 +243,7 @@ public class Board {
     /**
      * Computes every legal move for current player.
      * @param checkForCheck whether to prevent self inflicted check / force player out of check
-     * @return HashSet of every legal move for current player.
+     * @return Collection of every legal move for current player.
      */
     public Collection<ChessMove> getAllLegalMoves(boolean checkForCheck) {
         HashSet<ChessMove> allLegalMoves = new HashSet<>(86); //86 = (64 / .75) + 1
@@ -359,7 +261,7 @@ public class Board {
     
     /**
      * Convenience method: by default respect rules of check
-     * @return HashSet of every legal move for current player.
+     * @return Collection of every legal move for current player.
      */
     public Collection<ChessMove> getAllLegalMoves() {
         return this.getAllLegalMoves(true);
@@ -454,63 +356,6 @@ public class Board {
     }
 
     /**
-     * Updates the GUI.
-     * Call this any time the selected piece changes, and between each move.
-     */
-    /*
-    public final void updateGraphics() {
-        boolean inCheck = this.hasCheck();
-        for (Node node : this.getChildren()) {
-            if (node.getClass().getSimpleName().equals("ImageView")) {
-                
-                ImageView thisTile = (ImageView) node;
-                int x = GridPane.getRowIndex(node);
-                int y = GridPane.getColumnIndex(node);
-                //never change background tiles
-                boolean foreground = !(thisTile.getImage().equals(TILE_DARK)
-                        || thisTile.getImage().equals(TILE_LIGHT));
-
-                //empty tile
-                if (tiles[x][y] == null && foreground) {
-                    thisTile.setImage(TILE_BLANK);
-                }
-                
-                //tile with pieces
-                else if(tiles[x][y] != null && foreground) {
-                    thisTile.setImage(tiles[x][y].getDefaultImage());
-                }
-
-                //reset lighting all lighting
-                thisTile.setEffect(DEFAULT_LIGHTING);
-                
-                //apply check lighting
-                if(tiles[x][y] != null && inCheck && tiles[x][y].player == this.currentPlayer 
-                        && tiles[x][y] instanceof King) {
-                    thisTile.setEffect(CHECK_LIGHTING);
-                }
-                
-                //apply selected piece hightlight
-                if (this.selected != null
-                        && tiles[x][y] == this.selected) {
-                    thisTile.setEffect(PICKUP_LIGHTING);
-                }
-                
-                //apply legal move highlight
-                if (this.selected != null) {
-                    for (int[] destination : this.selected.getLegalMoves(this)) {
-                        if (x == destination[0] && y == destination[1] && !this.causesCheck(
-                                        new ChessMove(selected.x,selected.y,destination[0],destination[1]))) {
-                            thisTile.setEffect(LEGALMOVE_LIGHTING);
-                        }
-                    }
-                }
-                
-            }
-        }
-    }
-    */
-
-    /**
      * Updates the character-based representation of the board in memory.
      */
     public void updateSimpleBoard() {
@@ -576,17 +421,4 @@ public class Board {
         this.player2 = newPlayer;
     }
     
-    /**
-     * Enable GUI interaction.
-     */
-    public void disable() {
-        this.enabled = false;
-    }
-    
-    /**
-     * Disable GUI interaction.
-     */
-    public void enable() {
-        this.enabled = true;
-    }
 }

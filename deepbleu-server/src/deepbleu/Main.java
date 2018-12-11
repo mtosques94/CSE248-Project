@@ -2,7 +2,7 @@ package deepbleu;
 
 public class Main {
 	
-	static boolean AITest = true;
+	static boolean AITest = false;
 
 	public static void main(String[] args) {
 		if(AITest) {

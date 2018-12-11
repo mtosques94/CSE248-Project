@@ -12,8 +12,6 @@ import java.util.HashSet;
  */
 public class Bishop extends Piece {
     
-    //static final Image DEFAULT_WHITE = new Image("/img/small/WhiteBishop.png");
-    //static final Image DEFAULT_BLACK = new Image("/img/small/BlackBishop.png");
     static final int [][] ALL_DELTAS = new int[][] {{-1,1},{1,1},{1,-1},{-1,-1}};
     
     public Bishop(int x, int y, Player p) {
@@ -31,15 +29,6 @@ public class Bishop extends Piece {
             return 'B';
         return 'b';
     }
- 
-    /*
-    @Override
-        public Image getDefaultImage() {
-        if(this.player.isWhite)
-            return DEFAULT_WHITE;
-        return DEFAULT_BLACK;
-    }
-    */
         
     @Override
     public boolean canMoveToLocation(int x, int y, Board b, boolean ignoreTurns) {

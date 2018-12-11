@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * Abstract representation of a chess piece. 
  * Has the most general sense of whether a move is legal.
- * Knows its character representation & graphical image.
+ * Knows its character representation.
  *
  * @author Matthew Tosques
  */
@@ -81,12 +81,6 @@ public abstract class Piece implements Serializable {
      * @return HashSet of every legal destination for this piece
      */
     public abstract Collection<int[]> getLegalMoves(Board b);
-    
-    /**
-     * Return an image of this piece.
-     * @return a JavaFX Image object representing this piece
-     */
-    //public abstract Image getDefaultImage();
     
     /**
      * A single character representing this piece.
