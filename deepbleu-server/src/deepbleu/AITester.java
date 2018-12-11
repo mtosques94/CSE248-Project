@@ -27,7 +27,7 @@ public class AITester {
 			totalTime += finishTime;
 		}
 		totalTime = totalTime / n;
-		System.out.println("\n\nAverage time: " + totalTime / 1000d + " seconds with " + n + " tests.");
+		System.out.println("\n\nAverage time: " + totalTime / (4000d) + " seconds with " + n + " tests.");
 	}
 
 }
