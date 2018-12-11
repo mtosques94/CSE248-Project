@@ -11,7 +11,7 @@ public class LoginListener {
 	private static LoginHandler lh = new LoginHandler();
 	private static Thread handler = new Thread(lh);
 
-	public static void main(String[] args) {
+	public static void run(String[] args) {
 		handler.start();
 		listenUp();
 	}
