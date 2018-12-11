@@ -19,7 +19,8 @@ server
 	if lose:
 		clientside bug forbids this
 
-to do:
+to do:	
 	login handshake
+	game request info (for example who is black or white)
 	clientside must send winning move before ending game
 	disconnect messages
