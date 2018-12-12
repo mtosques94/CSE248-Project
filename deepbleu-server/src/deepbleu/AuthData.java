@@ -1,11 +1,11 @@
 package deepbleu;
 
-public class AuthPair {
+public class AuthData {
 
 	private String username;
 	private String password;
 
-	public AuthPair(String username, String password) {
+	public AuthData(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}

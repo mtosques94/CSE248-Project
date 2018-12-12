@@ -70,7 +70,7 @@ public class LoginHandler implements Runnable {
 				BufferedReader reader = new BufferedReader(isr);
 				String line = reader.readLine();
 				System.out.println(line);
-				AuthPair latestAuth = gson.fromJson(line, AuthPair.class);
+				AuthData latestAuth = gson.fromJson(line, AuthData.class);
 				System.out.println("LoginHandler parsed AuthPair: " + latestAuth);
 				
 				String sql = "SELECT * FROM Players WHERE username='" + latestAuth.getUsername()

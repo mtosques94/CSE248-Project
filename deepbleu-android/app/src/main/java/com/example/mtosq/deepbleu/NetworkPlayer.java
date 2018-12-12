@@ -65,7 +65,7 @@ public class NetworkPlayer extends Player {
             clientConnection.connect(sa);
             buffIn = new BufferedReader(new InputStreamReader(clientConnection.getInputStream()));
             buffOut = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()));
-            AuthPair logMeIn = new AuthPair(username, password);
+            AuthData logMeIn = new AuthData(username, password);
             this.writeJson(logMeIn);
 
         } catch (IOException e) {
