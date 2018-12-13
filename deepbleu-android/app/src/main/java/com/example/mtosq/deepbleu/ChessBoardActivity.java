@@ -53,12 +53,15 @@ public class ChessBoardActivity extends AppCompatActivity {
         for(int x=0;x<8;x++) {
             for(int y=0;y<8;y++) {
 
-                String tmpID = "bgr" + (7-x) + "c" + y;
+                String imgID;
+                if(playerOne.isWhite)
+                    imgID = "bgr" + (7-x) + "c" + y;
+                else imgID = "bgr" + x + "c" + y;
 
-                int resID = getResources().getIdentifier(tmpID,
+                int resID = getResources().getIdentifier(imgID,
                         "id", getPackageName());
 
-                ImageView tmp = (ImageView) findViewById(resID);
+                ImageView tmp = findViewById(resID);
 
                 ImageBoard[x][y] = tmp;
 
