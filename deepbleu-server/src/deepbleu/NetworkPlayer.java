@@ -73,6 +73,11 @@ public class NetworkPlayer extends Player {
         }
 
     }
+    
+    public void disconnect() throws IOException {
+    	this.clientConnection.close();
+    	this.clientConnection = new Socket();
+    }
 
 	public void writeLine(String line) {
 		try {

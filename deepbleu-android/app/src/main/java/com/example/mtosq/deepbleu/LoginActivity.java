@@ -46,9 +46,9 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("p1", p1);
                     startActivity(intent);
                 } else if(response.equals("BAD")) {
-                    //to do: user not found
+                    p2n.disconnect();
                 } else {
-                    //to do: invalid response
+                    p2n.disconnect();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

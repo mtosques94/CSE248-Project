@@ -84,7 +84,7 @@ public class LoginHandler implements Runnable {
 					if (!r.isBeforeFirst()) {
 						System.out.println(latestAuth.toString() + " NOT FOUND");
 						newGuy.writeLine("BAD");
-						
+						newGuy.disconnect();
 					}
 					else {
 
@@ -103,7 +103,7 @@ public class LoginHandler implements Runnable {
 						}
 					}
 					
-				} catch (SQLException e) {
+				} catch (SQLException | IOException e) {
 					e.printStackTrace();
 				}
 
