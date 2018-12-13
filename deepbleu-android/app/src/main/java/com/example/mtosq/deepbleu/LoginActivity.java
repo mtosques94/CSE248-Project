@@ -5,6 +5,7 @@ import android.net.Network;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -28,17 +29,19 @@ public class LoginActivity extends AppCompatActivity {
 
         TextView userNameField = findViewById(R.id.userNameField);
         TextView passwordField = findViewById(R.id.passwordField);
+        CheckBox isBlackCheckBox = findViewById(R.id.isBlackCheckBox);
 
         String username = userNameField.getText().toString();
         String password = passwordField.getText().toString();
+        boolean isBlack = isBlackCheckBox.isChecked();
 
-        Player p1 = new GUIPlayer(username, false);
-        Player p2 = new NetworkPlayer("Server", true);
+        Player p1 = new GUIPlayer(username, !isBlack);
+        Player p2 = new NetworkPlayer("Server", isBlack);
 
         Thread loginThread = new Thread(() -> {
             try  {
                 NetworkPlayer p2n = (NetworkPlayer) p2;
-                p2n.connect("10.0.2.2", 1994, username, password, true);
+                p2n.connect("10.0.2.2", 1994, username, password, isBlack);
                 String response = p2n.readLine().trim();
 
                 if(response.equals("GOOD")) {
