@@ -92,8 +92,8 @@ public class LoginHandler implements Runnable {
 						System.out.print(r.getString("username") + " ");
 						System.out.println(r.getString("password"));
 						
-						newGuy = new NetworkPlayer(latestAuth.getUsername(), true, newConnection);
-						newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", false));
+						newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(), newConnection);
+						newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
 						try {
 							System.out.println("Network game created!  Submitting to GamePool...");
 							gamePool.addGame(newGame);

@@ -58,21 +58,21 @@ public class NetworkPlayer extends Player {
 		}
 	}
 
-	public void connect(String addr, int port, String username, String password) {
-		try {
-			InetAddress ia = InetAddress.getByName(addr);
-			SocketAddress sa = new InetSocketAddress(ia, port);
-			clientConnection.connect(sa);
-			buffIn = new BufferedReader(new InputStreamReader(clientConnection.getInputStream()));
-			buffOut = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()));
-			AuthData logMeIn = new AuthData(username, password);
-			this.writeJson(logMeIn);
+    public void connect(String addr, int port, String username, String password, boolean playAsWhite) {
+        try {
+            InetAddress ia = InetAddress.getByName(addr);
+            SocketAddress sa = new InetSocketAddress(ia, port);
+            clientConnection.connect(sa);
+            buffIn = new BufferedReader(new InputStreamReader(clientConnection.getInputStream()));
+            buffOut = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()));
+            AuthData logMeIn = new AuthData(username, password, playAsWhite);
+            this.writeJson(logMeIn);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
 	public void writeLine(String line) {
 		try {

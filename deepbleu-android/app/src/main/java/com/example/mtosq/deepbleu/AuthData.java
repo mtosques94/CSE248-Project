@@ -4,10 +4,12 @@ public class AuthData {
 
     private String username;
     private String password;
+    private boolean playAsWhite;
 
-    public AuthData(String username, String password) {
+    public AuthData(String username, String password, boolean playAsWhite) {
         this.username = username;
         this.password = password;
+        this.playAsWhite = playAsWhite;
     }
 
     public String getUsername() {
@@ -18,9 +20,13 @@ public class AuthData {
         return password;
     }
 
+    public boolean isWhite() {
+        return playAsWhite;
+    }
+
     @Override
     public String toString() {
-        return "AuthData [username=" + username + ", password=" + password + "]";
+        return "AuthPair [username=" + username + ", password=" + password + "]";
     }
 
 }

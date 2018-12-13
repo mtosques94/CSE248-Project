@@ -73,37 +73,50 @@ public class Board extends GridPane {
      * @param p2 Player two.
      */
     public Board(Player p1, Player p2) {
-        initLighting();
-        this.player1 = p1;
-        this.player2 = p2;
-        //White goes first.
-        if (player1.isWhite) 
-            currentPlayer = player1;
-        else currentPlayer = player2;
+		initLighting();
+		this.player1 = p1;
+		this.player2 = p2;
+
+		Player white;
+		Player black;
+
+		// White goes first.
+		if (player1.isWhite) {
+			currentPlayer = player1;
+			white = player1;
+			black = player2;
+		} else {
+			currentPlayer = player2;
+			white = player2;
+			black = player1;
+		}
+
         //Using an ArrayList to make this a bit more readable.
         ArrayList<Piece> inPlay = new ArrayList(32);
-        //Add player1's pieces to the board.
-        for (int x = 0; x < 8; x++)
-            inPlay.add(new Pawn(6, x, p1));
-        inPlay.add(new Rook(7, 0, p1));
-        inPlay.add(new Knight(7, 1, p1));
-        inPlay.add(new Bishop(7, 2, p1));
-        inPlay.add(new King(7, 3, p1));
-        inPlay.add(new Queen(7, 4, p1));
-        inPlay.add(new Bishop(7, 5, p1));
-        inPlay.add(new Knight(7, 6, p1));
-        inPlay.add(new Rook(7, 7, p1));
-        //Add player2's pieces to the board.
-        for (int x = 0; x < 8; x++)
-            inPlay.add(new Pawn(1, x, p2));
-        inPlay.add(new Rook(0, 0, p2));
-        inPlay.add(new Knight(0, 1, p2));
-        inPlay.add(new Bishop(0, 2, p2));
-        inPlay.add(new King(0, 3, p2));
-        inPlay.add(new Queen(0, 4, p2));
-        inPlay.add(new Bishop(0, 5, p2));
-        inPlay.add(new Knight(0, 6, p2));
-        inPlay.add(new Rook(0, 7, p2));
+        //Add white pieces to the board.
+        for (int x = 0; x < 8; x++) {
+            inPlay.add(new Pawn(6, x, white));
+        }
+        inPlay.add(new Rook(7, 0, white));
+        inPlay.add(new Knight(7, 1, white));
+        inPlay.add(new Bishop(7, 2, white));
+        inPlay.add(new King(7, 3, white));
+        inPlay.add(new Queen(7, 4, white));
+        inPlay.add(new Bishop(7, 5, white));
+        inPlay.add(new Knight(7, 6, white));
+        inPlay.add(new Rook(7, 7, white));
+        //Add black pieces to the board.
+        for (int x = 0; x < 8; x++) {
+            inPlay.add(new Pawn(1, x, black));
+        }
+        inPlay.add(new Rook(0, 0, black));
+        inPlay.add(new Knight(0, 1, black));
+        inPlay.add(new Bishop(0, 2, black));
+        inPlay.add(new King(0, 3, black));
+        inPlay.add(new Queen(0, 4, black));
+        inPlay.add(new Bishop(0, 5, black));
+        inPlay.add(new Knight(0, 6, black));
+        inPlay.add(new Rook(0, 7, black));
         //Convert ArrayList to 2d array of pieces.
         inPlay.forEach((p) -> {tiles[p.x][p.y] = p;});
         //Add background tiles

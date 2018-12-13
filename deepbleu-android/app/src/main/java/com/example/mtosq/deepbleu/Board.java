@@ -35,39 +35,46 @@ public class Board {
 
         this.player1 = p1;
         this.player2 = p2;
-        //this.player1 = new GUIPlayer("GUI", true);
-        //this.player2 = new ComputerPlayer("deepbleu", false);
+        Player white;
+        Player black;
 
-        //White goes first.
-        if (player1.isWhite)
+        // White goes first.
+        if (player1.isWhite) {
             currentPlayer = player1;
-        else currentPlayer = player2;
+            white = player1;
+            black = player2;
+        } else {
+            currentPlayer = player2;
+            white = player2;
+            black = player1;
+        }
+
         //Using an ArrayList to make this a bit more readable.
         ArrayList<Piece> inPlay = new ArrayList(32);
-        //Add player1's pieces to the board.
+        //Add white pieces to the board.
         for (int x = 0; x < 8; x++) {
-            inPlay.add(new Pawn(6, x, player1));
+            inPlay.add(new Pawn(6, x, white));
         }
-        inPlay.add(new Rook(7, 0, player1));
-        inPlay.add(new Knight(7, 1, player1));
-        inPlay.add(new Bishop(7, 2, player1));
-        inPlay.add(new King(7, 3, player1));
-        inPlay.add(new Queen(7, 4, player1));
-        inPlay.add(new Bishop(7, 5, player1));
-        inPlay.add(new Knight(7, 6, player1));
-        inPlay.add(new Rook(7, 7, player1));
-        //Add player2's pieces to the board.
+        inPlay.add(new Rook(7, 0, white));
+        inPlay.add(new Knight(7, 1, white));
+        inPlay.add(new Bishop(7, 2, white));
+        inPlay.add(new King(7, 3, white));
+        inPlay.add(new Queen(7, 4, white));
+        inPlay.add(new Bishop(7, 5, white));
+        inPlay.add(new Knight(7, 6, white));
+        inPlay.add(new Rook(7, 7, white));
+        //Add black pieces to the board.
         for (int x = 0; x < 8; x++) {
-            inPlay.add(new Pawn(1, x, player2));
+            inPlay.add(new Pawn(1, x, black));
         }
-        inPlay.add(new Rook(0, 0, player2));
-        inPlay.add(new Knight(0, 1, player2));
-        inPlay.add(new Bishop(0, 2, player2));
-        inPlay.add(new King(0, 3, player2));
-        inPlay.add(new Queen(0, 4, player2));
-        inPlay.add(new Bishop(0, 5, player2));
-        inPlay.add(new Knight(0, 6, player2));
-        inPlay.add(new Rook(0, 7, player2));
+        inPlay.add(new Rook(0, 0, black));
+        inPlay.add(new Knight(0, 1, black));
+        inPlay.add(new Bishop(0, 2, black));
+        inPlay.add(new King(0, 3, black));
+        inPlay.add(new Queen(0, 4, black));
+        inPlay.add(new Bishop(0, 5, black));
+        inPlay.add(new Knight(0, 6, black));
+        inPlay.add(new Rook(0, 7, black));
         //Convert ArrayList to 2d array of pieces.
         inPlay.forEach((p) -> {tiles[p.x][p.y] = p;});
     }

@@ -46,7 +46,7 @@ public class ChessBoardActivity extends AppCompatActivity {
         playerOne = (GUIPlayer) getIntent().getSerializableExtra("p1");
         //playerOne = new ComputerPlayer("localAI", true);
 
-        playerTwo = new NetworkPlayer("Server", false);
+        playerTwo = new NetworkPlayer("Server", !playerOne.isWhite);
 
         board = new Board(playerOne,playerTwo);
         ImageBoard = new ImageView[8][8];

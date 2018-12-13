@@ -32,13 +32,13 @@ public class LoginActivity extends AppCompatActivity {
         String username = userNameField.getText().toString();
         String password = passwordField.getText().toString();
 
-        Player p1 = new GUIPlayer(username, true);
-        Player p2 = new NetworkPlayer("Server", false);
+        Player p1 = new GUIPlayer(username, false);
+        Player p2 = new NetworkPlayer("Server", true);
 
         Thread loginThread = new Thread(() -> {
             try  {
                 NetworkPlayer p2n = (NetworkPlayer) p2;
-                p2n.connect("10.0.2.2", 1994, username, password);
+                p2n.connect("10.0.2.2", 1994, username, password, true);
                 String response = p2n.readLine().trim();
 
                 if(response.equals("GOOD")) {
