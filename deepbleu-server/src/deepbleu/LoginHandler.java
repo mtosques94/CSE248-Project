@@ -65,12 +65,11 @@ public class LoginHandler implements Runnable {
 			
 			try {
 				System.out.println("LoginHandler ready for client connection...");
-				Socket clientConnection = pendingConnections.take();
-				InputStreamReader isr = new InputStreamReader(clientConnection.getInputStream());
-				BufferedReader reader = new BufferedReader(isr);
-				String line = reader.readLine();
-				System.out.println(line);
-				AuthData latestAuth = gson.fromJson(line, AuthData.class);
+				Socket newConnection = pendingConnections.take();
+				newGuy = new NetworkPlayer("Unauthorized User", false, newConnection);
+				
+				
+				AuthData latestAuth = gson.fromJson(newGuy.readLine(), AuthData.class);
 				System.out.println("LoginHandler parsed AuthPair: " + latestAuth);
 				
 				String sql = "SELECT * FROM Players WHERE username='" + latestAuth.getUsername()
@@ -84,14 +83,16 @@ public class LoginHandler implements Runnable {
 
 					if (!r.isBeforeFirst()) {
 						System.out.println(latestAuth.toString() + " NOT FOUND");
-						clientConnection.close();
+						newGuy.writeLine("BAD");
+						
 					}
 					else {
-						
+
+						newGuy.writeLine("GOOD");
 						System.out.print(r.getString("username") + " ");
 						System.out.println(r.getString("password"));
 						
-						newGuy = new NetworkPlayer(latestAuth.getUsername(), true, clientConnection);
+						newGuy = new NetworkPlayer(latestAuth.getUsername(), true, newConnection);
 						newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", false));
 						try {
 							System.out.println("Network game created!  Submitting to GamePool...");
@@ -106,7 +107,7 @@ public class LoginHandler implements Runnable {
 					e.printStackTrace();
 				}
 
-			} catch (InterruptedException | IOException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
