@@ -56,7 +56,7 @@ public class ChessBoardActivity extends AppCompatActivity {
                 String imgID;
                 if(playerOne.isWhite)
                     imgID = "bgr" + (7-x) + "c" + y;
-                else imgID = "bgr" + x + "c" + y;
+                else imgID = "bgr" + x + "c" + (7 - y);
 
                 int resID = getResources().getIdentifier(imgID,
                         "id", getPackageName());
@@ -68,22 +68,6 @@ public class ChessBoardActivity extends AppCompatActivity {
                 Piece p = board.tiles[x][y];
                 if(p != null) {
                     tmp.setImageResource(p.getDefaultImage());
-                }
-
-                if(!playerOne.isWhite) {
-                    if(x % 2 == 0) {
-                        if(y % 2 == 0) {
-                            tmp.setBackgroundResource(R.drawable.purewhite);
-                        } else {
-                            tmp.setBackgroundResource(R.drawable.puregrey);
-                        }
-                    } else {
-                        if(y % 2 == 0) {
-                            tmp.setBackgroundResource(R.drawable.puregrey);
-                        } else {
-                            tmp.setBackgroundResource(R.drawable.purewhite);
-                        }
-                    }
                 }
 
                 final int finalX = x;
