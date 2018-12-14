@@ -58,8 +58,8 @@ public class Board {
         inPlay.add(new Rook(7, 0, white));
         inPlay.add(new Knight(7, 1, white));
         inPlay.add(new Bishop(7, 2, white));
-        inPlay.add(new King(7, 3, white));
-        inPlay.add(new Queen(7, 4, white));
+        inPlay.add(new King(7, 4, white));
+        inPlay.add(new Queen(7, 3, white));
         inPlay.add(new Bishop(7, 5, white));
         inPlay.add(new Knight(7, 6, white));
         inPlay.add(new Rook(7, 7, white));
@@ -70,8 +70,8 @@ public class Board {
         inPlay.add(new Rook(0, 0, black));
         inPlay.add(new Knight(0, 1, black));
         inPlay.add(new Bishop(0, 2, black));
-        inPlay.add(new King(0, 3, black));
-        inPlay.add(new Queen(0, 4, black));
+        inPlay.add(new Queen(0, 3, black));
+        inPlay.add(new King(0, 4, black));
         inPlay.add(new Bishop(0, 5, black));
         inPlay.add(new Knight(0, 6, black));
         inPlay.add(new Rook(0, 7, black));
