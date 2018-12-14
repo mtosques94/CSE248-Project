@@ -98,12 +98,7 @@ public class ChessBoardActivity extends AppCompatActivity {
 
         this.updateGraphics();
 
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                ChessBoardActivity.this.getWinner();
-            }
-        };
+        Runnable r = () -> ChessBoardActivity.this.getWinner();
 
         Thread t = new Thread(r);
         t.start();
