@@ -70,6 +70,22 @@ public class ChessBoardActivity extends AppCompatActivity {
                     tmp.setImageResource(p.getDefaultImage());
                 }
 
+                if(!playerOne.isWhite) {
+                    if(x % 2 == 0) {
+                        if(y % 2 == 0) {
+                            tmp.setBackgroundResource(R.drawable.purewhite);
+                        } else {
+                            tmp.setBackgroundResource(R.drawable.puregrey);
+                        }
+                    } else {
+                        if(y % 2 == 0) {
+                            tmp.setBackgroundResource(R.drawable.puregrey);
+                        } else {
+                            tmp.setBackgroundResource(R.drawable.purewhite);
+                        }
+                    }
+                }
+
                 final int finalX = x;
                 final int finalY = y;
                 tmp.setOnClickListener(event -> {
