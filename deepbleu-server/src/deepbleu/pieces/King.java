@@ -1,13 +1,14 @@
 package deepbleu.pieces;
 
-import deepbleu.Board;
-import deepbleu.ChessMove;
-import deepbleu.Piece;
-import deepbleu.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 //import javafx.scene.image.Image;
+
+import deepbleu.Board;
+import deepbleu.ChessMove;
+import deepbleu.Piece;
+import deepbleu.Player;
 
 /**
  * @author Matthew Tosques

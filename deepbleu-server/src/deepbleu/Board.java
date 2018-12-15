@@ -1,10 +1,16 @@
 package deepbleu;
 
-import deepbleu.pieces.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+
+import deepbleu.pieces.Bishop;
+import deepbleu.pieces.King;
+import deepbleu.pieces.Knight;
+import deepbleu.pieces.Pawn;
+import deepbleu.pieces.Queen;
+import deepbleu.pieces.Rook;
 
 /**       
  * Represents a chess board with two players.

@@ -1,10 +1,12 @@
 package deepbleu;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.google.gson.Gson;
@@ -81,25 +83,37 @@ public class LoginHandler implements Runnable {
 					p.clearParameters();
 					r = p.executeQuery();
 
+					//account not found
 					if (!r.isBeforeFirst()) {
 						System.out.println(latestAuth.toString() + " NOT FOUND");
-						newGuy.writeLine("BAD");
-						newGuy.disconnect();
-					}
-					else {
-
-						newGuy.writeLine("GOOD");
-						System.out.print(r.getString("username") + " ");
-						System.out.println(r.getString("password"));
-						
-						newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(), newConnection);
-						newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
-						try {
-							System.out.println("Network game created!  Submitting to GamePool...");
-							gamePool.addGame(newGame);
+						if(latestAuth.isNew()) {
+							//to do
 						}
-						catch (Exception e ) {
-							e.printStackTrace();
+						else {
+							newGuy.writeLine("BAD");
+							newGuy.disconnect();
+						}
+					}
+					
+					//account already exists
+					else {
+						if(latestAuth.isNew()) {
+							//to do
+						}
+						else {
+							newGuy.writeLine("GOOD");
+							System.out.print(r.getString("username") + " ");
+							System.out.println(r.getString("password"));
+						
+							newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(), newConnection);
+							newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
+							try {
+								System.out.println("Network game created!  Submitting to GamePool...");
+								gamePool.addGame(newGame);
+							}
+							catch (Exception e ) {
+								e.printStackTrace();
+							}
 						}
 					}
 					
@@ -110,9 +124,6 @@ public class LoginHandler implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			
 		}
-
 	}
 }

@@ -1,6 +1,5 @@
 package deepbleu;
 
-import deepbleu.pieces.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -10,6 +9,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import deepbleu.pieces.Bishop;
+import deepbleu.pieces.King;
+import deepbleu.pieces.Knight;
+import deepbleu.pieces.Pawn;
+import deepbleu.pieces.Queen;
+import deepbleu.pieces.Rook;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 

@@ -1,7 +1,13 @@
 package deepbleu;
 
-import deepbleu.pieces.*;
 import java.io.Serializable;
+
+import deepbleu.pieces.Bishop;
+import deepbleu.pieces.King;
+import deepbleu.pieces.Knight;
+import deepbleu.pieces.Pawn;
+import deepbleu.pieces.Queen;
+import deepbleu.pieces.Rook;
 
 /**
  * Represents a command to move a chess piece.

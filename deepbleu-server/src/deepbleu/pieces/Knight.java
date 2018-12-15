@@ -1,11 +1,11 @@
 package deepbleu.pieces;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import deepbleu.Board;
 import deepbleu.Piece;
 import deepbleu.Player;
-
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * @author Matthew Tosques
