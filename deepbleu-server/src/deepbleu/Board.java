@@ -27,7 +27,7 @@ public class Board {
     private static boolean GUI_EXIT_CHECK = true; //Restricting GUI moves works fine.
     
     Piece[][] tiles = new Piece[8][8]; //A 2D array will provide modestly efficient lookup.
-    ArrayList<ChessMove> moveHistory = new ArrayList(); //Every canon move since the game began.
+    ArrayList<ChessMove> moveHistory = new ArrayList<>(); //Every canon move since the game began.
     final char[][] simpleBoard = new char[8][8]; //A text-only view of the board.
     
     Player player1, player2, currentPlayer; //The two players, and a reference indicating who's turn it is.
@@ -59,7 +59,7 @@ public class Board {
         }
 
         //Using an ArrayList to make this a bit more readable.
-        ArrayList<Piece> inPlay = new ArrayList(32);
+        ArrayList<Piece> inPlay = new ArrayList<>(32);
         //Add white pieces to the board.
         for (int x = 0; x < 8; x++) {
             inPlay.add(new Pawn(6, x, white));

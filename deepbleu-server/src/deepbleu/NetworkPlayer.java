@@ -15,8 +15,8 @@ import com.google.gson.Gson;
 public class NetworkPlayer extends Player {
 
     private Socket clientConnection = new Socket();
-    private static BufferedReader buffIn = null;
-    private static BufferedWriter buffOut = null;
+    private BufferedReader buffIn = null;
+    private BufferedWriter buffOut = null;
 
     Gson gson = new Gson();
 

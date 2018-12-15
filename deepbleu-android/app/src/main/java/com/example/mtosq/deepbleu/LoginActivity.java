@@ -1,11 +1,13 @@
 package com.example.mtosq.deepbleu;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -15,7 +17,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    public void loginBtnPressed (View view) {
+    public void loginBtnPressed(View view) {
 
         TextView userNameField = findViewById(R.id.userNameField);
         TextView passwordField = findViewById(R.id.passwordField);
@@ -31,21 +33,38 @@ public class LoginActivity extends AppCompatActivity {
         Player p2 = new NetworkPlayer("Server", isBlack);
 
         Thread loginThread = new Thread(() -> {
-            try  {
+            try {
+                //connect to server
                 NetworkPlayer p2n = (NetworkPlayer) p2;
                 System.out.println("Network player connecting.  New acct = " + isNew);
                 p2n.connect("10.0.2.2", 1994, username, password, isBlack, isNew);
                 String response = p2n.readLine().trim();
 
-                if(response.equals("GOOD")) {
+                //server accepted user
+                if (response.equals("GOOD")) {
                     Intent intent = new Intent(LoginActivity.this, ChessBoardActivity.class);
                     intent.putExtra("p1", p1);
                     startActivity(intent);
-                } else if(response.equals("BAD")) {
-                    p2n.disconnect();
-                } else {
-                    p2n.disconnect();
                 }
+
+                //server denied user
+                else if (response.equals("BAD")) {
+                    p2n.disconnect();
+                    if(isNew) {
+                        //account already exists
+                        runOnUiThread(() -> Toast.makeText(getBaseContext(), "Account already exists.", Toast.LENGTH_SHORT).show());
+                    } else {
+                        //account not found
+                        runOnUiThread(() -> Toast.makeText(getBaseContext(), "Account not found.", Toast.LENGTH_SHORT).show());
+                    }
+                }
+
+                //server spoke gibberish
+                else {
+                    p2n.disconnect();
+                    runOnUiThread(() -> Toast.makeText(getBaseContext(), "Error communicating with server.", Toast.LENGTH_SHORT).show());
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

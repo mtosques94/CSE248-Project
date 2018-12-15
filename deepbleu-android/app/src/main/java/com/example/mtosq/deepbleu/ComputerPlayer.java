@@ -38,7 +38,7 @@ public class ComputerPlayer extends Player {
 
     //Use as many threads as possible, up to the number of logical CPUs present
     private static ExecutorService ES = Executors.newFixedThreadPool(
-            Math.max(Runtime.getRuntime().availableProcessors() - 0, 1));
+            Math.max(Runtime.getRuntime().availableProcessors() - 1, 1));
     //This has the completed work returned to a blocking queue in order of completion.
     private static ExecutorCompletionService ECS = new ExecutorCompletionService(ES);
 
