@@ -1,23 +1,13 @@
 package com.example.mtosq.deepbleu;
 
 import android.content.Intent;
-import android.net.Network;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-
 public class LoginActivity extends AppCompatActivity {
-
-    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
