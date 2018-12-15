@@ -65,13 +65,27 @@ public class NetworkPlayer extends Player {
             clientConnection.connect(sa);
             buffIn = new BufferedReader(new InputStreamReader(clientConnection.getInputStream()));
             buffOut = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()));
-            AuthData logMeIn = new AuthData(username, password, playAsWhite);
+            AuthData logMeIn = new AuthData(username, password, playAsWhite, false);
             this.writeJson(logMeIn);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public void connect(String addr, int port, String username, String password, boolean playAsWhite, boolean isNew) {
+        try {
+            InetAddress ia = InetAddress.getByName(addr);
+            SocketAddress sa = new InetSocketAddress(ia, port);
+            clientConnection.connect(sa);
+            buffIn = new BufferedReader(new InputStreamReader(clientConnection.getInputStream()));
+            buffOut = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()));
+            AuthData logMeIn = new AuthData(username, password, playAsWhite, isNew);
+            this.writeJson(logMeIn);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disconnect() throws IOException {

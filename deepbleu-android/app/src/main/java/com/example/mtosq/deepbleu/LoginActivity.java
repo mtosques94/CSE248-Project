@@ -20,10 +20,12 @@ public class LoginActivity extends AppCompatActivity {
         TextView userNameField = findViewById(R.id.userNameField);
         TextView passwordField = findViewById(R.id.passwordField);
         CheckBox isBlackCheckBox = findViewById(R.id.isBlackCheckBox);
+        CheckBox createAccountCheckBox = findViewById(R.id.createAccountCheckBox);
 
         String username = userNameField.getText().toString();
         String password = passwordField.getText().toString();
         boolean isBlack = isBlackCheckBox.isChecked();
+        boolean isNew = createAccountCheckBox.isChecked();
 
         Player p1 = new GUIPlayer(username, !isBlack);
         Player p2 = new NetworkPlayer("Server", isBlack);
@@ -31,7 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         Thread loginThread = new Thread(() -> {
             try  {
                 NetworkPlayer p2n = (NetworkPlayer) p2;
-                p2n.connect("10.0.2.2", 1994, username, password, isBlack);
+                System.out.println("Network player connecting.  New acct = " + isNew);
+                p2n.connect("10.0.2.2", 1994, username, password, isBlack, isNew);
                 String response = p2n.readLine().trim();
 
                 if(response.equals("GOOD")) {

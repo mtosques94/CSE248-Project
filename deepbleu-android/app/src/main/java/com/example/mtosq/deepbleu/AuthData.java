@@ -5,11 +5,13 @@ public class AuthData {
     private String username;
     private String password;
     private boolean playAsWhite;
+    private boolean createNewAcct;
 
-    public AuthData(String username, String password, boolean playAsWhite) {
+    public AuthData(String username, String password, boolean playAsWhite, boolean createNewAcct) {
         this.username = username;
         this.password = password;
         this.playAsWhite = playAsWhite;
+        this.createNewAcct = createNewAcct;
     }
 
     public String getUsername() {
@@ -24,9 +26,14 @@ public class AuthData {
         return playAsWhite;
     }
 
+    public boolean isNew() {
+        return createNewAcct;
+    }
+
     @Override
     public String toString() {
-        return "AuthPair [username=" + username + ", password=" + password + "]";
+        return "AuthData [username=" + username + ", password=" + password + ", playAsWhite=" + playAsWhite
+                + ", createNewAcct=" + createNewAcct + "]";
     }
 
 }
