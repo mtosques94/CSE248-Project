@@ -183,7 +183,7 @@ class AITask implements Callable<CompletedWork> {
     }
 
     @Override
-    public CompletedWork call() throws Exception {
+    public CompletedWork call() {
         //Starting tree as minimizing player because we have already performed our move in ComputerPlayer.getMove()
         return new CompletedWork(moveBeingTried, evalMove(b, MAX_DEPTH - 1, LOSE, WIN, false));
     }
