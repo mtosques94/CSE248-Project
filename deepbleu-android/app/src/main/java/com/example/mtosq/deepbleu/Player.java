@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Abstract representation of a player.
- * Has a name, and either goes first or doesn'gameLoop.
+ * Has a name, and either goes first or doesn't.
  *
  * @author Matthew Tosques
  */

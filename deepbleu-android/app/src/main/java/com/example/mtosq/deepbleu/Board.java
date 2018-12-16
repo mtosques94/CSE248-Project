@@ -19,7 +19,7 @@ public class Board {
     //Toggle whether players are forced to exit check and if board prevents self inflicted check for ALL moves.
     //Otherwise self inflicted check is only prevented when moving one's King.
     static boolean AI_EXIT_CHECK = false; //NOT RECOMMENDED, code is way too slow.
-    //AI doesn'gameLoop need to be forced out anyway.
+    //AI doesn't need to be forced out anyway.
     static boolean GUI_EXIT_CHECK = true; //Restricting GUI moves works fine.
 
 
@@ -175,10 +175,10 @@ public class Board {
      * @return validity of given move
      */
     public boolean isLegalMove(ChessMove move) {
-        //you can'gameLoop move an empty tile
+        //you can't move an empty tile
         if(tiles[move.fromRow][move.fromCol] == null)
             return false;
-        //you can'gameLoop capture your own piece
+        //you can't capture your own piece
         if(tiles[move.toRow][move.toCol] != null)
             if(tiles[move.toRow][move.toCol].player == this.currentPlayer)
                 return false;
@@ -187,7 +187,7 @@ public class Board {
     }
 
     /**
-     * Makes sure a piece doesn'gameLoop hop over any other piece(s) during a move.
+     * Makes sure a piece doesn't hop over any other piece(s) during a move.
      * This method is called in the canMoveToLocation method of a each piece.
      * Knight does not need this functionality.
      * Does not check starting tile or destination tile, only the path between.
@@ -235,7 +235,7 @@ public class Board {
 
     /**
      * Can the enemy of a given piece move to a given location?
-     * A player mustn'gameLoop put their own king in check.
+     * A player mustn't put their own king in check.
      * @param x row
      * @param y column
      * @param p the piece you are concerned about

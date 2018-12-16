@@ -139,9 +139,9 @@ class AITask implements Callable {
     //Material score values
     static final double WIN = Double.POSITIVE_INFINITY;
     static final double LOSE = Double.NEGATIVE_INFINITY;
-    //King can'gameLoop be worth infinity because we are scoring by material.
+    //King can't be worth infinity because we are scoring by material.
     static final double KING_VALUE = 10000000;
-    //don'gameLoop deviate too far from this
+    //don't deviate too far from this
     static final double QUEEN_VALUE = 950;
     static final double ROOK_VALUE = 500;
     static final double KNIGHT_VALUE = 300;
@@ -154,12 +154,12 @@ class AITask implements Callable {
     static final double ADVANCE_PIECE_BONUS = 15; //move pieces forward
     static final double ADVANCE_PAWN_BONUS = 11; //move pawns forward sometimes more
     static final double PAWN_ON_PAWN_BONUS = 27; //use pawns to block enemy pawns head on,
-    //don'gameLoop be too scared of the opponent doing the same
+    //don't be too scared of the opponent doing the same
     static final double PAWN_D_E_BONUS = 12; //strongly favor moving king & queen's pawns early on
     static final double SIDE_PAWN_PENALTY = 18; //pawns on the edge are worth a bit less
     static final double BISHOP_PAIR_BONUS = 90; //two bishops are greater than the sum of their parts
     static final double MOBILITY_BONUS = 3; //add this many points for every legal move you end up with
-    //don'gameLoop consider king or pawn
+    //don't consider king or pawn
     //weight sides uniquely? I'm not sure if this actually does anything useful.
     static final double CONVICTION_DIVISOR = 1.0;
 
@@ -234,7 +234,7 @@ class AITask implements Callable {
 
     double evalBoard(Board b) {
         double score = 0;
-        boolean isKing = false; //don'gameLoop call instanceof twice
+        boolean isKing = false; //don't call instanceof twice
         boolean isPawn = false; // ^^
         boolean hasBishop = false; //using this in loop to count bishops
         boolean hasEnemyBishop = false; //same idea for enemy

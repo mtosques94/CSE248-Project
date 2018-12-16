@@ -37,7 +37,7 @@ public abstract class Piece implements Serializable {
      * Basic logic about moving a piece, has nothing to do with any specific piece.
      * 1. This must be your piece.
      * 2. Destination tile must be somewhere on the board.
-     * 3. You mustn'gameLoop have a piece of your own on the destination tile.
+     * 3. You mustn't have a piece of your own on the destination tile.
      * 4. (Effectively implied by 3) No zero distance moves.
      * @param x potential destination row
      * @param y potential destination column
