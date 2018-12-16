@@ -8,7 +8,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/tableMain"
         android:layout_width="384dp"
@@ -455,5 +454,24 @@
 
         </TableRow>
     </TableLayout>
+
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:onClick="logoutBtnPressed"
+        android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
 
 </android.support.constraint.ConstraintLayout>

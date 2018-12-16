@@ -41,15 +41,9 @@ public class ComputerPlayer extends Player {
             Math.min(Runtime.getRuntime().availableProcessors(), 4));
     //This has the completed work returned to a blocking queue in order of completion.
     private ExecutorCompletionService<CompletedWork> ECS = new ExecutorCompletionService<>(ES);
-    //The progress bar is bound to this value.
-    private final ReadOnlyDoubleWrapper AI_PROGRESS = new ReadOnlyDoubleWrapper(0);
     
     public ComputerPlayer(String name, boolean isWhite) {
         super(name, isWhite);
-    }
-    
-    public ReadOnlyDoubleProperty progressProperty() {
-        return AI_PROGRESS;
     }
 
     public void selfDestruct() {
@@ -67,7 +61,6 @@ public class ComputerPlayer extends Player {
     public ChessMove getMove(Board b) {
         int setDepth = DEPTH.get();
         boolean useMobility = USE_MOBILITY_SCORING.get();
-        AI_PROGRESS.set(0);
         //For each legal move, submit an AITask to the pool for immediate processing.
         Collection<ChessMove> legalMoves = b.getAllLegalMoves();
         for (ChessMove potentialMove : legalMoves) {
@@ -115,15 +108,11 @@ public class ComputerPlayer extends Player {
                 System.out.print(++numMovesScored + " ");
                 if ((numMovesScored) % 5 == 0) 
                     System.out.println();
-                double num = numMovesScored; 
-                AI_PROGRESS.set(num / total);
                 scores.add(mostRecentlyCompleted);
                 //Change the intended move if needed.
                 if (mostRecentlyCompleted.getScore() > bestScore.getScore()) {
                     bestScore = mostRecentlyCompleted;
                     move = bestScore.getRootMove();
-                    //b.selected = b.tiles[move.fromRow][move.fromCol];
-                    //b.updateGraphics();
                     System.out.print(" {Best score: " + bestScore.getScore() + "} ");
                 }
             } catch (InterruptedException | ExecutionException ex) {
@@ -133,7 +122,6 @@ public class ComputerPlayer extends Player {
         long totalTime = System.currentTimeMillis() - startTime;
         System.out.print("\nTotal time to decide: " + totalTime / 1000 + " seconds.  ");
         b.selected = null;
-        AI_PROGRESS.set(0);
         return move;
     }
 }

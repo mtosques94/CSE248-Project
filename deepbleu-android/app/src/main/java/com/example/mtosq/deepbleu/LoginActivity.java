@@ -1,6 +1,5 @@
 package com.example.mtosq.deepbleu;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(LoginActivity.this, ChessBoardActivity.class);
                     intent.putExtra("p1", p1);
                     startActivity(intent);
+                    finish();
                 }
 
                 //server denied user

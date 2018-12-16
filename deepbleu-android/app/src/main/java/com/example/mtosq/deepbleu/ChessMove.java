@@ -18,7 +18,7 @@ public class ChessMove implements Serializable {
     int toCol;
 
     //If this move captures a piece, we will hold a reference to the captured piece here.
-    //Otherwise we can't rewind the game properly.
+    //Otherwise we can'gameLoop rewind the game properly.
     Piece enemyCaptured = null;
 
     /**

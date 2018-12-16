@@ -1,9 +1,12 @@
 package com.example.mtosq.deepbleu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 public class ChessBoardActivity extends AppCompatActivity {
@@ -15,6 +18,9 @@ public class ChessBoardActivity extends AppCompatActivity {
     private ImageView[][] ImageBoard;
     //this gives the updateGraphics method something to look at without race conditions
     private Piece[][] myBoard = new Piece[8][8];
+
+    Thread gameLoop = new Thread(() -> ChessBoardActivity.this.getWinner());
+    boolean gameOver = false;
 
     private Runnable updateGraphics = new Runnable() {
         @Override
@@ -48,7 +54,7 @@ public class ChessBoardActivity extends AppCompatActivity {
 
         playerTwo = new NetworkPlayer("Server", !playerOne.isWhite);
 
-        board = new Board(playerOne,playerTwo);
+        board = new Board(playerOne, playerTwo);
         ImageBoard = new ImageView[8][8];
         for(int x=0;x<8;x++) {
             for(int y=0;y<8;y++) {
@@ -92,19 +98,13 @@ public class ChessBoardActivity extends AppCompatActivity {
                         }
                     }
                 });
-
             }
         }
-
         this.updateGraphics();
-
-        Runnable r = () -> ChessBoardActivity.this.getWinner();
-
-        Thread t = new Thread(r);
-        t.start();
+        gameLoop.start();
     }
 
-    public void updateGraphics() {
+    private void updateGraphics() {
 
         for(int x=0;x<8;x++) {
             for (int y = 0; y < 8; y++) {
@@ -144,6 +144,9 @@ public class ChessBoardActivity extends AppCompatActivity {
             }
             playValidMove();
             updateGraphics();
+            if(gameOver) {
+                return new ConsolePlayer("Game over.", false);
+            }
         }
         return board.getWinner();
     }
@@ -151,13 +154,17 @@ public class ChessBoardActivity extends AppCompatActivity {
     /**
      * Makes sure moves make sense before we send them to the board.
      */
-    void playValidMove() {
+    private void playValidMove() {
         boolean valid = false;
         while (!valid) {
             System.out.println(board);
             System.out.println(board.currentPlayer + "'s turn.  Total number of legal moves: "
                     + board.getAllLegalMoves().size());
             ChessMove potentialMove = board.currentPlayer.getMove(board);
+            if(potentialMove == null) {
+                gameOver = true;
+                return;
+            }
             if (!(board.currentPlayer instanceof ConsolePlayer)
                     || board.isLegalMove(potentialMove)) {
                 System.out.print("Final decision: " + board.currentPlayer + " moved " + potentialMove + ".  \n");
@@ -177,6 +184,23 @@ public class ChessBoardActivity extends AppCompatActivity {
                 System.out.println("Invalid move.");
             }
         }
+    }
+
+    public void logoutBtnPressed(View view) {
+        Thread t = new Thread(() -> {
+            NetworkPlayer p2n = (NetworkPlayer) this.playerTwo;
+            p2n.writeLine("QUIT");
+            Intent intent = new Intent(ChessBoardActivity.this, LoginActivity.class);
+            startActivity(intent);
+
+            try {
+                p2n.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            this.gameLoop.interrupt();});
+        t.start();
     }
 
 }

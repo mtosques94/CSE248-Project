@@ -87,6 +87,8 @@ public class LoginHandler implements Runnable {
 						System.out.println(latestAuth.toString() + " NOT FOUND");
 						if (latestAuth.isNew()) {
 							// to do
+							newGuy.writeLine("BAD");
+							newGuy.disconnect();
 						} else {
 							newGuy.writeLine("BAD");
 							newGuy.disconnect();
