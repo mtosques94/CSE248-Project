@@ -86,12 +86,13 @@ public class LoginHandler implements Runnable {
 					if (!r.isBeforeFirst()) {
 						System.out.println(latestAuth.toString() + " NOT FOUND");
 						if (latestAuth.isNew()) {
-
+							DB.close();
+							DB = DriverManager.getConnection("jdbc:sqlite:PlayerDB.sqlite3");
 							PreparedStatement prep = DB.prepareStatement("insert into Players values (?, ?);");
 							prep.clearParameters();
 							prep.setString(1, latestAuth.getUsername());
 							prep.setString(2, latestAuth.getPassword());
-							prep.executeBatch();
+							prep.executeUpdate();
 							newGuy.writeLine("GOOD");
 							newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(), newConnection);
 							newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
@@ -129,6 +130,13 @@ public class LoginHandler implements Runnable {
 
 				} catch (SQLException | IOException e) {
 					e.printStackTrace();
+				}
+				finally {
+					try {
+						DB.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 
 			} catch (InterruptedException e) {
