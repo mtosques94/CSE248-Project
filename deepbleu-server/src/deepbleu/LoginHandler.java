@@ -73,34 +73,47 @@ public class LoginHandler implements Runnable {
 				AuthData latestAuth = gson.fromJson(newGuy.readLine(), AuthData.class);
 				System.out.println("LoginHandler parsed AuthPair: " + latestAuth);
 
-				String sql = "SELECT * FROM Players WHERE username='" + latestAuth.getUsername() + "' AND password= '"
-						+ latestAuth.getPassword() + "'\r\n";
-				PreparedStatement p = null;
-				ResultSet r = null;
+				String userPassSQL = "SELECT * FROM Players WHERE username='" + latestAuth.getUsername()
+						+ "' AND password= '" + latestAuth.getPassword() + "'\r\n";
+				String userSQL = "SELECT * FROM Players WHERE username='" + latestAuth.getUsername() + "'\r\n";
+
+				PreparedStatement psUserPass = null;
+				ResultSet userPassResult = null;
+				PreparedStatement psUser = null;
+				ResultSet userResult = null;
+
 				try {
-					p = DB.prepareStatement(sql);
-					p.clearParameters();
-					r = p.executeQuery();
+					psUserPass = DB.prepareStatement(userPassSQL);
+					psUserPass.clearParameters();
+					userPassResult = psUserPass.executeQuery();
+
+					psUser = DB.prepareStatement(userSQL);
+					psUser.clearParameters();
+					userResult = psUserPass.executeQuery();
 
 					// account not found
-					if (!r.isBeforeFirst()) {
+					if (!userPassResult.isBeforeFirst()) {
 						System.out.println(latestAuth.toString() + " NOT FOUND");
 						if (latestAuth.isNew()) {
-							DB.close();
-							DB = DriverManager.getConnection("jdbc:sqlite:PlayerDB.sqlite3");
-							PreparedStatement prep = DB.prepareStatement("insert into Players values (?, ?);");
-							prep.clearParameters();
-							prep.setString(1, latestAuth.getUsername());
-							prep.setString(2, latestAuth.getPassword());
-							prep.executeUpdate();
-							newGuy.writeLine("GOOD");
-							newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(), newConnection);
-							newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
-							try {
-								System.out.println("Network game created!  Submitting to GamePool...");
-								gamePool.addGame(newGame);
-							} catch (Exception e) {
-								e.printStackTrace();
+							if (!userResult.isBeforeFirst()) {
+								newGuy.writeLine("BAD");
+							} else {
+								PreparedStatement prep = DB.prepareStatement("insert into Players values (?, ?);");
+								prep.clearParameters();
+								prep.setString(1, latestAuth.getUsername());
+								prep.setString(2, latestAuth.getPassword());
+								prep.executeUpdate();
+								newGuy.writeLine("GOOD");
+								newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(),
+										newConnection);
+								newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
+
+								try {
+									System.out.println("Network game created!  Submitting to GamePool...");
+									gamePool.addGame(newGame);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 
 						} else {
