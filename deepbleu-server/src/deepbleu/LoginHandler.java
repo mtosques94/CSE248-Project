@@ -131,14 +131,6 @@ public class LoginHandler implements Runnable {
 				} catch (SQLException | IOException e) {
 					e.printStackTrace();
 				}
-				finally {
-					try {
-						DB.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
