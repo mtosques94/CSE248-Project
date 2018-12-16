@@ -86,9 +86,22 @@ public class LoginHandler implements Runnable {
 					if (!r.isBeforeFirst()) {
 						System.out.println(latestAuth.toString() + " NOT FOUND");
 						if (latestAuth.isNew()) {
-							// to do
-							newGuy.writeLine("BAD");
-							newGuy.disconnect();
+
+							PreparedStatement prep = DB.prepareStatement("insert into Players values (?, ?);");
+							prep.clearParameters();
+							prep.setString(1, latestAuth.getUsername());
+							prep.setString(2, latestAuth.getPassword());
+							prep.executeBatch();
+							newGuy.writeLine("GOOD");
+							newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(), newConnection);
+							newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
+							try {
+								System.out.println("Network game created!  Submitting to GamePool...");
+								gamePool.addGame(newGame);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+
 						} else {
 							newGuy.writeLine("BAD");
 							newGuy.disconnect();
@@ -102,8 +115,6 @@ public class LoginHandler implements Runnable {
 							newGuy.disconnect();
 						} else {
 							newGuy.writeLine("GOOD");
-							System.out.print(r.getString("username") + " ");
-							System.out.println(r.getString("password"));
 
 							newGuy = new NetworkPlayer(latestAuth.getUsername(), !latestAuth.isWhite(), newConnection);
 							newGame = new GameOfChess(newGuy, new ComputerPlayer("deepbleu", latestAuth.isWhite()));
