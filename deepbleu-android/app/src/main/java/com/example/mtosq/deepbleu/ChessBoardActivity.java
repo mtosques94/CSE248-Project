@@ -32,7 +32,7 @@ public class ChessBoardActivity extends AppCompatActivity {
 
             System.out.println("START GFX UPDATE");
 
-            Piece selected = ChessBoardActivity.board.selected;
+            Piece selected = board.selected;
 
             for(int x=0;x<8;x++) {
                 for (int y = 0; y < 8; y++) {
@@ -46,7 +46,7 @@ public class ChessBoardActivity extends AppCompatActivity {
                     else {
                         iv.setImageResource(myBoard[x][y].getDefaultImage());
                         if(selected != null && selected.x == x && selected.y == y) {
-                            iv.setColorFilter(ContextCompat.getColor(iv.getContext(), R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+                            iv.setColorFilter(ContextCompat.getColor(iv.getContext(), R.color.colorPrimary), PorterDuff.Mode.DARKEN);
                             iv.setScaleX(1.15f);
                             iv.setScaleY(1.15f);
                         } else {
@@ -55,6 +55,13 @@ public class ChessBoardActivity extends AppCompatActivity {
                             iv.setScaleY(1f);
                         }
                     }
+                }
+            }
+            if(selected != null) {
+                for(int[] legalMoves : selected.getLegalMoves(board)) {
+                    int x = legalMoves[0];
+                    int y = legalMoves[1];
+                    ImageBoard[x][y].setColorFilter(Color.GREEN, PorterDuff.Mode.OVERLAY);
                 }
             }
 
