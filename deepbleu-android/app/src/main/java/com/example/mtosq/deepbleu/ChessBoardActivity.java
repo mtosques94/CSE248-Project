@@ -61,7 +61,8 @@ public class ChessBoardActivity extends AppCompatActivity {
                 for(int[] legalMoves : selected.getLegalMoves(board)) {
                     int x = legalMoves[0];
                     int y = legalMoves[1];
-                    ImageBoard[x][y].setColorFilter(Color.GREEN, PorterDuff.Mode.OVERLAY);
+                    if(!board.causesCheck(new ChessMove(selected.x, selected.y, x, y)))
+                        ImageBoard[x][y].setColorFilter(Color.GREEN, PorterDuff.Mode.OVERLAY);
                 }
             }
 
