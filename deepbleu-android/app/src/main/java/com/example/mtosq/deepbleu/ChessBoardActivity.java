@@ -1,7 +1,10 @@
 package com.example.mtosq.deepbleu;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +17,7 @@ public class ChessBoardActivity extends AppCompatActivity {
     private Player playerOne = null;
     private Player playerTwo = null;
 
-    private Board board = null;
+    static Board board = null;
     private ImageView[][] ImageBoard;
     //this gives the updateGraphics method something to look at without race conditions
     private Piece[][] myBoard = new Piece[8][8];
@@ -23,19 +26,34 @@ public class ChessBoardActivity extends AppCompatActivity {
     boolean gameOver = false;
 
     private Runnable updateGraphics = new Runnable() {
+
         @Override
         public void run() {
 
             System.out.println("START GFX UPDATE");
+
+            Piece selected = ChessBoardActivity.board.selected;
 
             for(int x=0;x<8;x++) {
                 for (int y = 0; y < 8; y++) {
                     ImageView iv = ImageBoard[x][y];
                     if(myBoard[x][y] == null) {
                         iv.setImageResource(R.drawable.transparent);
+                        iv.clearColorFilter();
+                        iv.setScaleX(1f);
+                        iv.setScaleY(1f);
                     }
                     else {
                         iv.setImageResource(myBoard[x][y].getDefaultImage());
+                        if(selected != null && selected.x == x && selected.y == y) {
+                            iv.setColorFilter(ContextCompat.getColor(iv.getContext(), R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+                            iv.setScaleX(1.15f);
+                            iv.setScaleY(1.15f);
+                        } else {
+                            iv.clearColorFilter();
+                            iv.setScaleX(1f);
+                            iv.setScaleY(1f);
+                        }
                     }
                 }
             }
